@@ -1,6 +1,7 @@
 import os
 
-from flask import Flask, send_from_directory
+import werkzeug
+from flask import Flask, send_from_directory, request
 
 from server.parser.xml_parser import XMLParser
 from server.utils.uitls import get_test_json
@@ -8,8 +9,12 @@ from server.utils.uitls import get_test_json
 app = Flask(__name__, static_folder='frontend/build')
 
 
-@app.route('/data')
-def get_parsed():
+@app.route('/data', methods=['POST', 'GET'])
+@app.errorhandler(werkzeug.exceptions.BadRequest)
+def get_data():
+    if request.method == 'POST':
+        print(request.data)
+
     return XMLParser().get_d3_tree_graph()
 
 
