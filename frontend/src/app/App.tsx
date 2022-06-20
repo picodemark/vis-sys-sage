@@ -1,8 +1,10 @@
 import React from 'react';
-import NavBar from './components/bars/NavBar';
-import ActionBar from './components/bars/ActionBar';
-import Containers from './components/containers/Containers';
+import NavBar from '../components/bars/NavBar';
+import ActionBar from '../components/bars/ActionBar';
+import Containers from '../components/containers/Containers';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { store } from '../store/store';
+import { Provider } from 'react-redux';
 
 const theme = createTheme({
   palette: {
@@ -24,11 +26,13 @@ const theme = createTheme({
 function App() {
   return (
     <div>
-      <ThemeProvider theme={theme}>
-        <NavBar></NavBar>
-        <ActionBar></ActionBar>
-        <Containers></Containers>
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <NavBar></NavBar>
+          <ActionBar></ActionBar>
+          <Containers></Containers>
+        </ThemeProvider>
+      </Provider>
     </div>
   );
 }
