@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Tree from 'react-d3-tree';
 import React from 'react';
-import { RawNodeDatum } from 'react-d3-tree/lib/types/common';
 import { useSelector } from 'react-redux';
 import { Toolbar, Typography } from '@mui/material';
 
