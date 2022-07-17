@@ -13,9 +13,10 @@ app = Flask(__name__, static_folder='frontend/build')
 @app.errorhandler(werkzeug.exceptions.BadRequest)
 def get_data():
     if request.method == 'POST':
-        print(request.data)
-
-    return XMLParser().get_d3_tree_graph()
+        if 'file' in request.files:
+            xml_string = request.files['file'].stream.read().decode('utf-8')
+            return XMLParser(xml_string).get_d3_tree_graph()
+    return "File upload was not successful!", 400
 
 
 @app.route('/test')
