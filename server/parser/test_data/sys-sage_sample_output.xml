@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sys-sage>
     <components>
-        <topology id="0" name="topology" addr="0x600000084000" temperature="50">
+        <topology id="0" name="topology" addr="0x600000084000">
             <Node id="1" name="sys-sage node" addr="0x600000084090"/>
             <Node id="0" name="sys-sage node" addr="0x600000084120">
                 <Chip id="0" name="Chip" addr="0x600000080000">
