@@ -28,9 +28,9 @@ function App() {
     <div>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <NavBar></NavBar>
-          <ActionBar></ActionBar>
-          <Containers></Containers>
+          <NavBar />
+          <ActionBar />
+          <Containers />
         </ThemeProvider>
       </Provider>
     </div>

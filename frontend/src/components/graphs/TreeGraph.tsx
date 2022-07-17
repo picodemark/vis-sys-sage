@@ -21,7 +21,7 @@ export default function TreeGraph() {
     y: 0
   });
 
-  const containerRef = useRef();
+  const treeGraphRef = useRef();
 
   return (
     <React.Fragment>
@@ -30,7 +30,7 @@ export default function TreeGraph() {
           Photos
         </Typography>
       </Toolbar>
-      <div style={containerStyles} ref={containerRef}>
+      <div style={containerStyles} ref={treeGraphRef}>
         <Tree
           data={selector.value}
           pathFunc={'step'}
