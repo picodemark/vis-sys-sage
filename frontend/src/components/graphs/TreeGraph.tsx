@@ -13,7 +13,6 @@ export default function TreeGraph() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const selector = useSelector((state) => state.treeData);
-  console.log(selector);
 
   const [translate, setTranslate] = useState({
     x: 0,
@@ -26,7 +25,7 @@ export default function TreeGraph() {
     <React.Fragment>
       <Toolbar variant="dense" color="primary">
         <Typography variant="h6" color="inherit" component="div">
-          Photos
+          Tree Config
         </Typography>
       </Toolbar>
       <div style={containerStyles} ref={treeGraphRef}>
