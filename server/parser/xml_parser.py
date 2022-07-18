@@ -26,6 +26,11 @@ class XMLParser:
         self.__dict_to_d3_tree_graph_rec(converted_dict)
         return converted_dict
 
+    def get_relevant_data(self):
+        data = {'tree': self.get_d3_tree_graph()}
+        data['nodes'] = [node['attributes']['addr'] for node in data['tree']['children']]
+        return data
+
     def get_compound_dict(self):
         pass
 
