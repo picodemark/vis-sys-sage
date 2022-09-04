@@ -12,7 +12,7 @@ $ git clone
 
 ### Install python packages
 
-The application is based on the [Flask](https://flask.palletsprojects.com/en/2.1.x/)  server.
+The application is based on the [Flask](https://flask.palletsprojects.com/en/2.1.x/) server.
 
 You need to create a virtual environment before installing the required packages:
 
@@ -41,13 +41,4 @@ Start the server to be able to use the application locally:
 
 ```console
 python -m flask run 
-```
-
-## Sys-sage
-
-Follow the following steps after cloning the [sys-sage](https://github.com/stepanvanecek/sys-sage) library:
-
-```
-cd vis-sys-sage-local
-python run.py
 ```
