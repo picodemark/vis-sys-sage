@@ -13,9 +13,17 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 
 export default function UploadButton() {
   const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState('success');
 
   const inputFile = useRef(null);
   const dispatch = useAppDispatch();
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   const onChange = (file) => {
     const formData = new FormData();
@@ -26,27 +34,21 @@ export default function UploadButton() {
           'Content-Type': 'multipart/form-data'
         }
       })
-      .then(function (response: any) {
+      .then((response: any) => {
         setOpen(true);
+        setStatus('success');
         inputFile.current.value = null;
         dispatch(setTreeData(response.data));
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
   return (
     <React.Fragment>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
           Upload was successful!
         </Alert>
       </Snackbar>
@@ -55,6 +57,7 @@ export default function UploadButton() {
         type="file"
         accept="text/xml"
         style={{ display: 'none' }}
+        onClick={() => (inputFile.current.value = null)}
         onChange={onChange}
       />
       <Button onClick={() => inputFile.current.click()}>Upload</Button>
