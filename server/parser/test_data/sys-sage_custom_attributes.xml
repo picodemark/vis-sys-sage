@@ -2,7 +2,9 @@
 <sys-sage>
     <components>
         <topology id="0" name="topology" addr="0x600000084000">
-            <Node id="1" name="sys-sage node" addr="0x600003dd8000" codename="marsupial" rack_no="15">
+            <Node id="1" name="sys-sage node" addr="0x600003dd8000">
+                <Attribute name="codename" value="marsupial"/>
+                <Attribute name="rack_no" value="15"/>
                 <Chip id="0" name="Chip" addr="0x600003ddc000">
                     <Cache id="7" name="cache" addr="0x6000038d80b0" cache_level="3" cache_size="17301504"
                            cache_associativity_ways="11">
@@ -20,8 +22,9 @@
                                cache_associativity_ways="16">
                             <Cache id="10" name="cache" addr="0x6000038d8370" cache_level="1" cache_size="32768"
                                    cache_associativity_ways="8">
-                                <Core id="1" name="Core" addr="0x600003ddc1b0" temperature="38.222000 C"
-                                      frequency='2000000000 Hz'>
+                                <Core id="1" name="Core" addr="0x600003ddc1b0">
+                                    <Attribute name="my_core_info"
+                                               value="temperature='38.222000 C' frequency='2000000000 Hz'"/>
                                     <HW_thread id="1" name="Thread" addr="0x600003ddc240"/>
                                 </Core>
                             </Cache>
@@ -76,8 +79,9 @@
                                cache_associativity_ways="16">
                             <Cache id="34" name="cache" addr="0x6000038d8bb0" cache_level="1" cache_size="32768"
                                    cache_associativity_ways="8">
-                                <Core id="4" name="Core" addr="0x600003ddc870" temperature='44.100000 C'
-                                      frequency='1500000000 Hz'>
+                                <Core id="4" name="Core" addr="0x600003ddc870">
+                                    <Attribute name="my_core_info"
+                                               value="temperature='44.100000 C' frequency='1500000000 Hz'"/>
                                     <HW_thread id="7" name="Thread" addr="0x600003ddc900"/>
                                 </Core>
                             </Cache>
@@ -247,11 +251,13 @@
         <datapath source="0x600003ed80a0" target="0x600003ed80a0" bw="8663.000000" latency="237.000000"/>
         <datapath source="0x600003ed8140" target="0x600003ed80a0" bw="6291.000000" latency="315.000000"/>
         <datapath source="0x600003ed81e0" target="0x600003ed80a0" bw="6267.000000" latency="319.000000"/>
-        <datapath source="0x600003ed8000" target="0x600003ed8140" bw="6439.000000" latency="302.000000"
-                  info="measured with no load on 07.07."/>
+        <datapath source="0x600003ed8000" target="0x600003ed8140" bw="6439.000000" latency="302.000000">
+            <Attribute name="info" value="measured with no load on 07.07."/>
+        </datapath>
         <datapath source="0x600003ed80a0" target="0x600003ed8140" bw="6609.000000" latency="313.000000"/>
-        <datapath source="0x600003ed8140" target="0x600003ed8140" bw="8539.000000" latency="237.000000"
-                  info="measured with no load on 07.07."/>
+        <datapath source="0x600003ed8140" target="0x600003ed8140" bw="8539.000000" latency="237.000000">
+            <Attribute name="info" value="measured with no load on 07.07."/>
+        </datapath>
         <datapath source="0x600003ed81e0" target="0x600003ed8140" bw="8412.000000" latency="210.000000"/>
         <datapath source="0x600003ed8000" target="0x600003ed81e0" bw="6315.000000" latency="309.000000"/>
         <datapath source="0x600003ed80a0" target="0x600003ed81e0" bw="6324.000000" latency="316.000000"/>

@@ -1,5 +1,6 @@
 import copy
 import os
+from datetime import datetime
 
 import xmltodict
 
@@ -10,11 +11,16 @@ __location__ = os.path.realpath(
 class XMLParser:
 
     def __init__(self, xml_string):
+        """
+
+        :param xml_string: XML string to be parsed
+        """
         self.xml = xml_string
-        self.attributes_black_list = ["id"]
+        # attributes not being included
+        self.attributes_black_list = ["addr"]
 
     def __load_xml_from_file(self):
-        with open(os.path.join(__location__, 'test_data/sys-sage_custom_attributes.xml')) as xml_file:
+        with open(os.path.join(__location__, "test_data/sys-sage_custom_attributes.xml")) as xml_file:
             self.xml = xml_file.read()
 
     def __get_dict(self):
@@ -23,7 +29,9 @@ class XMLParser:
     def get_d3_tree_graph(self):
         converted_dict = copy.deepcopy(self.__get_dict())
         converted_dict = converted_dict['sys-sage']['components']['topology']
+        start_time = datetime.now()
         self.__dict_to_d3_tree_graph_rec(converted_dict)
+        print((datetime.now() - start_time).total_seconds())
         return converted_dict
 
     def get_relevant_data(self):
@@ -49,7 +57,7 @@ class XMLParser:
         for key, value in copy_dict.items():
             # set name
             if key == "@name":
-                node_dict['name'] = value
+                node_dict["name"] = value
             # set attributes and node info
             elif key[0] == "@":
                 if "attributes" not in node_dict:
@@ -60,6 +68,15 @@ class XMLParser:
                     node_dict["attributes"][key[1:]] = value
                 else:
                     node_dict["info"][key[1:]] = value
+            # set further attributes
+            elif key == "Attribute":
+                if "attributes" not in node_dict:
+                    node_dict["attributes"] = {}
+                if isinstance(node_dict["Attribute"], list):
+                    for attribute_obj in node_dict["Attribute"]:
+                        node_dict["attributes"][attribute_obj["@name"]] = attribute_obj["@value"]
+                else:
+                    node_dict["attributes"][node_dict["Attribute"]["@name"]] = node_dict["Attribute"]["@value"]
             # set children
             elif isinstance(value, dict):
                 if "children" in node_dict:
