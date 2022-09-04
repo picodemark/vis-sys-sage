@@ -1,5 +1,5 @@
 import * as React from 'react';
-import TreeGraph from '../graphs/TreeGraph';
+import TreeGraph from '../graphs/tree/TreeGraph';
 import Container from './Container';
 
 export default function Containers() {
