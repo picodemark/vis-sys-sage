@@ -3,6 +3,7 @@ import Tree from 'react-d3-tree';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Toolbar, Typography } from '@mui/material';
+import TreeNode from './TreeNode';
 
 const containerStyles = {
   width: '100%',
@@ -34,6 +35,10 @@ export default function TreeGraph() {
           pathFunc={'step'}
           translate={translate}
           orientation={'vertical'}
+          renderCustomNodeElement={TreeNode}
+          depthFactor={500}
+          initialDepth={1}
+          separation={{ siblings: 5, nonSiblings: 5 }}
         />
       </div>
     </React.Fragment>
