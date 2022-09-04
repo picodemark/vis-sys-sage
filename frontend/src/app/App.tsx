@@ -9,21 +9,21 @@ import { Provider } from 'react-redux';
 const theme = createTheme({
   palette: {
     primary: {
-      light: '#757ce8',
-      main: '#fba92c',
-      dark: '#002884',
+      light: '#64a0c8',
+      main: '#0065bd',
+      dark: '#e37222',
       contrastText: '#fff'
     },
     secondary: {
       light: '#ff7961',
-      main: '#d3d3d3',
+      main: '#dad7cb',
       dark: '#ba000d',
       contrastText: '#000'
     }
   }
 });
 
-function App() {
+export default function App() {
   return (
     <div>
       <Provider store={store}>
@@ -36,5 +36,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
