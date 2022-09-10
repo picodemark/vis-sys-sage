@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import treeDataReducer from './treeDataSlice';
+import graphDataReducer from './graphDataSlice';
 
 export const store = configureStore({
   reducer: {
-    treeData: treeDataReducer
+    graphData: graphDataReducer
   }
 });
 
