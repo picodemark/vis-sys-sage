@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { useRef, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
-import { setTreeData } from '../../store/treeDataSlice';
+import { setGraphData } from '../../store/graphDataSlice';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
@@ -11,7 +11,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function UploadButton() {
+export default function LoadButton() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('success');
 
@@ -38,7 +38,7 @@ export default function UploadButton() {
         setOpen(true);
         setStatus('success');
         inputFile.current.value = null;
-        dispatch(setTreeData(response.data));
+        dispatch(setGraphData(response.data));
       })
       .catch((error) => {
         console.log(error);
@@ -60,7 +60,9 @@ export default function UploadButton() {
         onClick={() => (inputFile.current.value = null)}
         onChange={onChange}
       />
-      <Button onClick={() => inputFile.current.click()}>Upload</Button>
+      <Button onClick={() => inputFile.current.click()} variant="outlined">
+        Load
+      </Button>
     </React.Fragment>
   );
 }
