@@ -9,14 +9,14 @@ import { Provider } from 'react-redux';
 const theme = createTheme({
   palette: {
     primary: {
-      light: '#64a0c8',
+      light: '#fff',
       main: '#0065bd',
-      dark: '#e37222',
+      dark: '#dad7cb',
       contrastText: '#fff'
     },
     secondary: {
       light: '#ff7961',
-      main: '#dad7cb',
+      main: '#fff',
       dark: '#ba000d',
       contrastText: '#000'
     }
