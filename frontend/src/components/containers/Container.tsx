@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const divStyle = {
-  marginTop: '2rem'
+  margin: '1rem'
 };
 
 interface ContainerProps {
@@ -22,8 +22,10 @@ export default function Container({ name, display }: ContainerProps) {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
           id="panel2a-header"
-          style={{ backgroundColor: '#dad7cd' }}>
-          <Typography>{name}</Typography>
+          style={{ backgroundColor: '#0065bd', opacity: 0.91 }}>
+          <Typography color="white" fontWeight="bold">
+            {name}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>{display}</AccordionDetails>
       </Accordion>
