@@ -1,3 +1,11 @@
+body {
+    margin: 0;
+}
+
 .containerHeader {
-    background-color: #d3d3d3;
+    background-color: #0065bd;
+}
+
+.datagrid--header {
+    background-color: #F8F8F8;
 }
