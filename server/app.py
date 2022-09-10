@@ -3,8 +3,7 @@ import os
 import werkzeug
 from flask import Flask, send_from_directory, request
 
-from server.parser.xml_parser import XMLParser
-from server.utils.uitls import get_test_json
+from server.parsers.xml_parser import XMLParser
 
 app = Flask(__name__, static_folder='frontend/build')
 
@@ -15,16 +14,11 @@ def get_data():
     if request.method == 'POST':
         if 'file' in request.files:
             xml_string = request.files['file'].stream.read().decode('utf-8')
-            return XMLParser(xml_string).get_d3_tree_graph()
+            return XMLParser(xml_string).get_data()
     return "File upload was not successful!", 400
 
 
-@app.route('/test')
-def get_test_data():
-    return get_test_json()
-
-
-@app.route('/', defaults={'path': ''})
+@app.route('/', defaults={'path': ''}, methods=['GET', 'POST'])
 @app.route('/<path:path>')
 def serve(path):
     # only serve build files in production
