@@ -9,8 +9,20 @@ import { red } from '@mui/material/colors';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import { CustomNodeElementProps } from 'react-d3-tree/lib/types/common';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import AttributesTable from './AttributesTable';
+import Paper, { PaperProps } from '@mui/material/Paper';
+import Draggable from 'react-draggable';
+import Typography from '@mui/material/Typography';
+
+function PaperComponent(props: PaperProps) {
+  return (
+    <Draggable handle="#draggable-dialog-title" cancel={'[class*="MuiDialogContent-root"]'}>
+      <Paper {...props} />
+    </Draggable>
+  );
+}
 
 export default function TreeNodeContent({ nodeDatum, toggleNode }: CustomNodeElementProps) {
   const [open, setOpen] = React.useState(false);
@@ -22,14 +34,22 @@ export default function TreeNodeContent({ nodeDatum, toggleNode }: CustomNodeEle
   const closeDialog = () => {
     setOpen(false);
   };
+
+  const treeNodeContentSize = {
+    x: -100,
+    y: 0,
+    width: 200,
+    height: 400
+  };
+
   return (
     <React.Fragment>
       <foreignObject x={-100} y={0} width={200} height={400}>
-        <Card sx={{ height: 150, backgroundColor: '#dad7cd' }} color="inherit">
+        <Card sx={{ height: 160, backgroundColor: '#dad7cd' }} color="inherit">
           <CardHeader
             avatar={
               <Avatar sx={{ bgcolor: red[500] }} aria-label="component-header">
-                C
+                T
               </Avatar>
             }
             title={nodeDatum.name === '' ? 'no name' : nodeDatum.name}
@@ -37,7 +57,12 @@ export default function TreeNodeContent({ nodeDatum, toggleNode }: CustomNodeEle
               nodeDatum?.attributes?.id === undefined ? 'no id' : 'id: ' + nodeDatum.attributes.id
             }
           />
-          <CardContent></CardContent>
+          <CardContent sx={{ padding: '0.5rem' }}>
+            <Typography sx={{ fontSize: '14px' }}>
+              #attributes:{' '}
+              {nodeDatum?.attributes === undefined ? 0 : Object.keys(nodeDatum.attributes).length}
+            </Typography>
+          </CardContent>
           <CardActions>
             {nodeDatum.attributes && (
               <Button size="small" onClick={openDialog}>
@@ -46,21 +71,29 @@ export default function TreeNodeContent({ nodeDatum, toggleNode }: CustomNodeEle
             )}
             {nodeDatum.children && (
               <Button size="small" onClick={toggleNode}>
-                Children
+                {nodeDatum.__rd3t.collapsed ? 'Open' : 'Close'}
               </Button>
             )}
           </CardActions>
         </Card>
       </foreignObject>
-      <Dialog open={open} keepMounted aria-describedby="alert-dialog-slide-description">
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
+      <ClickAwayListener
+        mouseEvent="onMouseDown"
+        touchEvent="onTouchStart"
+        onClickAway={closeDialog}>
+        <Dialog
+          open={open}
+          onClose={closeDialog}
+          PaperComponent={PaperComponent}
+          aria-describedby="alert-dialog-slide-description">
+          <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
+            {'Attributes of ' + nodeDatum.name}
+          </DialogTitle>
+          <DialogContent id="alert-dialog-slide-description" sx={{ padding: 0 }}>
+            <AttributesTable rowData={nodeDatum.attributes} />
+          </DialogContent>
+        </Dialog>
+      </ClickAwayListener>
     </React.Fragment>
   );
 }

@@ -4,6 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Toolbar, Typography } from '@mui/material';
 import TreeNode from './TreeNode';
+import { selectCurrentTree } from '../../../store/graphDataSlice';
 
 const containerStyles = {
   width: '100%',
@@ -13,7 +14,7 @@ const containerStyles = {
 export default function TreeGraph() {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const selector = useSelector((state) => state.treeData);
+  const selector = useSelector((state) => selectCurrentTree(state));
 
   const [translate, setTranslate] = useState({
     x: 0,
@@ -31,7 +32,7 @@ export default function TreeGraph() {
       </Toolbar>
       <div style={containerStyles} ref={treeGraphRef}>
         <Tree
-          data={selector.value}
+          data={selector}
           pathFunc={'step'}
           translate={translate}
           orientation={'vertical'}
