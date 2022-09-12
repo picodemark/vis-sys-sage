@@ -4,13 +4,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useSelector } from 'react-redux';
-import { selectAllNodes } from '../../store/graphDataSlice';
+import { selectNodeList } from '../../store/graphDataSlice';
 import { useState } from 'react';
 import { setNodeID } from '../../store/graphDataSlice';
 import { useAppDispatch } from '../../app/hooks';
 
 export default function NodeList() {
-  const selector = useSelector((state) => selectAllNodes(state));
+  const selector = useSelector((state) => selectNodeList(state));
 
   const [selectedNode, setSelectedNode] = useState('all');
 
