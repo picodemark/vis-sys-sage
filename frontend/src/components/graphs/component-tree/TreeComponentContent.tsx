@@ -1,20 +1,18 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import CardHeader from '@mui/material/CardHeader';
-import Avatar from '@mui/material/Avatar';
-import { red } from '@mui/material/colors';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import { CustomNodeElementProps } from 'react-d3-tree/lib/types/common';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { CustomNodeElementProps, TreeNodeDatum } from 'react-d3-tree/lib/types/common';
 import AttributesTable from './AttributesTable';
 import Paper, { PaperProps } from '@mui/material/Paper';
 import Draggable from 'react-draggable';
-import Typography from '@mui/material/Typography';
+import ComponentAvatar from '../ComponentAvatar';
+import Badge from '@mui/material/Badge';
+
+import Button from '@mui/material/Button';
 
 function PaperComponent(props: PaperProps) {
   return (
@@ -24,7 +22,19 @@ function PaperComponent(props: PaperProps) {
   );
 }
 
-export default function TreeNodeContent({ nodeDatum, toggleNode }: CustomNodeElementProps) {
+interface SpecificTreeNodeDatum extends TreeNodeDatum {
+  id?: string;
+  unique_component_id?: string;
+}
+
+interface SpecificCustomNodeElementProps extends Omit<CustomNodeElementProps, 'nodeDatum'> {
+  nodeDatum: SpecificTreeNodeDatum;
+}
+
+export default function TreeComponentContent({
+  nodeDatum,
+  toggleNode
+}: SpecificCustomNodeElementProps) {
   const [open, setOpen] = React.useState(false);
 
   const openDialog = () => {
@@ -35,52 +45,34 @@ export default function TreeNodeContent({ nodeDatum, toggleNode }: CustomNodeEle
     setOpen(false);
   };
 
-  const treeNodeContentSize = {
-    x: -100,
-    y: 0,
-    width: 200,
-    height: 400
-  };
-
   return (
     <React.Fragment>
-      <foreignObject x={-100} y={0} width={200} height={400}>
-        <Card sx={{ height: 160, backgroundColor: '#dad7cd' }} color="inherit">
+      <foreignObject x={-100} y={0} width={180} height={250}>
+        <Card sx={{ height: 120, backgroundColor: '#dad7cd' }} elevation={0}>
           <CardHeader
-            avatar={
-              <Avatar sx={{ bgcolor: red[500] }} aria-label="component-header">
-                T
-              </Avatar>
-            }
+            avatar={<ComponentAvatar id={nodeDatum.unique_component_id}></ComponentAvatar>}
             title={nodeDatum.name === '' ? 'no name' : nodeDatum.name}
-            subheader={
-              nodeDatum?.attributes?.id === undefined ? 'no id' : 'id: ' + nodeDatum.attributes.id
-            }
+            subheader={nodeDatum?.id === undefined ? 'no id' : 'id: ' + nodeDatum.id}
           />
-          <CardContent sx={{ padding: '0.5rem' }}>
-            <Typography sx={{ fontSize: '14px' }}>
-              #attributes:{' '}
-              {nodeDatum?.attributes === undefined ? 0 : Object.keys(nodeDatum.attributes).length}
-            </Typography>
-          </CardContent>
-          <CardActions>
+          <CardActions disableSpacing>
             {nodeDatum.attributes && (
-              <Button size="small" onClick={openDialog}>
-                Attributes
-              </Button>
+              <Badge badgeContent={Object.keys(nodeDatum.attributes).length} color="primary">
+                <Button onClick={openDialog} variant="outlined" size="small">
+                  Info
+                </Button>
+              </Badge>
             )}
             {nodeDatum.children && (
-              <Button size="small" onClick={toggleNode}>
+              <Button
+                onClick={toggleNode}
+                variant="outlined"
+                size="small"
+                sx={{ marginLeft: 'auto' }}>
                 {nodeDatum.__rd3t.collapsed ? 'Open' : 'Close'}
               </Button>
             )}
           </CardActions>
         </Card>
-      </foreignObject>
-      <ClickAwayListener
-        mouseEvent="onMouseDown"
-        touchEvent="onTouchStart"
-        onClickAway={closeDialog}>
         <Dialog
           open={open}
           onClose={closeDialog}
@@ -93,7 +85,7 @@ export default function TreeNodeContent({ nodeDatum, toggleNode }: CustomNodeEle
             <AttributesTable rowData={nodeDatum.attributes} />
           </DialogContent>
         </Dialog>
-      </ClickAwayListener>
+      </foreignObject>
     </React.Fragment>
   );
 }
