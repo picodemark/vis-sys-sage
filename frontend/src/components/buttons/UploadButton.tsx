@@ -6,12 +6,13 @@ import { useAppDispatch } from '../../app/hooks';
 import { setGraphData } from '../../store/graphDataSlice';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import UploadIcon from '@mui/icons-material/Upload';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function LoadButton() {
+export default function UploadButton() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('success');
 
@@ -25,31 +26,45 @@ export default function LoadButton() {
     setOpen(false);
   };
 
-  const onChange = (file) => {
+  const onChange = async (file) => {
     const formData = new FormData();
     formData.append('file', file.target.files[0]);
-    axios
-      .post('/data', formData, {
+
+    try {
+      const { data } = await axios.post('/data', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      })
-      .then((response: any) => {
-        setOpen(true);
-        setStatus('success');
-        inputFile.current.value = null;
-        dispatch(setGraphData(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
       });
+
+      // set status
+      setOpen(true);
+      setStatus('success');
+
+      // update global graph data
+      dispatch(setGraphData(data));
+
+      // reset to allow to upload same file again
+      inputFile.current.value = null;
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        console.log(e.message);
+      } else {
+        console.log(e);
+      }
+      setStatus('error');
+    }
   };
 
   return (
     <React.Fragment>
-      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          Upload was successful!
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}>
+        <Alert onClose={handleClose} severity={status == 'success' ? 'success' : 'error'}>
+          Upload was {status === 'success' && 'not'} successful!
         </Alert>
       </Snackbar>
       <input
@@ -60,7 +75,10 @@ export default function LoadButton() {
         onClick={() => (inputFile.current.value = null)}
         onChange={onChange}
       />
-      <Button onClick={() => inputFile.current.click()} variant="outlined">
+      <Button
+        onClick={() => inputFile.current.click()}
+        variant="outlined"
+        startIcon={<UploadIcon />}>
         Load
       </Button>
     </React.Fragment>
