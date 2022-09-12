@@ -1,43 +1,57 @@
 import { Graph } from 'react-d3-graph';
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectDataPath } from '../../../store/graphDataSlice';
+import Box from '@mui/material/Box';
 
-const initialConfig = {
-  highlightDegree: 1,
-  nodeHighlightBehavior: true,
-  staticGraphWithDragAndDrop: true,
-  node: {
-    color: 'lightgreen',
-    size: 200,
-    highlightStrokeColor: 'blue'
-  },
-  link: {
-    highlightColor: 'lightblue'
-  }
-};
+import { selectDataPath } from '../../../store/graphDataSlice';
+import DataGraphComponent from './DataGraphComponent';
 
 export default function DataPathGraph() {
   const selector = useSelector((state) => selectDataPath(state));
 
-  const [config, setConfig] = useState(initialConfig);
+  const [extraConfig, setExtraConfig] = useState({});
 
-  const div = useCallback((node) => {
-    if (node !== null) {
-      config['width'] = node.getBoundingClientRect().width;
-      setConfig(config);
+  const box = useRef(null);
+
+  const setGraphWidth = () => {
+    if (box?.current?.offsetWidth !== undefined) {
+      setExtraConfig({ width: box.current.offsetWidth });
     }
+  };
+
+  useEffect(() => {
+    setGraphWidth();
+    window.addEventListener('resize', setGraphWidth);
   }, []);
 
+  const config = {
+    height: 500,
+    highlightDegree: 1,
+    nodeHighlightBehavior: true,
+    d3: {
+      gravity: -1000,
+      linkLength: 150,
+      linkStrength: 1,
+      alphaTarget: 0.05
+    },
+    node: {
+      renderLabel: false,
+      color: 'lightgreen',
+      size: 400,
+      highlightStrokeColor: 'blue',
+      viewGenerator: (node) => <DataGraphComponent {...node}></DataGraphComponent>
+    },
+    link: {
+      highlightColor: 'red'
+    },
+    ...extraConfig
+  };
+
   return (
-    <div id="" ref={div}>
-      <Graph
-        id="data-path-graph" // id is mandatory
-        data={Object.assign({}, selector)}
-        config={config}
-      />
-    </div>
+    <Box sx={{ width: '100%' }} ref={box}>
+      <Graph id="data-path-graph" data={Object.assign({}, selector)} config={config} />
+    </Box>
   );
 }
