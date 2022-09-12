@@ -4,31 +4,30 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Box from '@mui/material/Box';
 
-const divStyle = {
-  margin: '1rem'
-};
-
-interface ContainerProps {
+interface Props {
   name: string;
   display: React.ReactNode;
 }
 
-export default function Container({ name, display }: ContainerProps) {
+export default function Container(props: Props) {
+  const { name, display } = props;
+
   return (
-    <div style={divStyle}>
+    <Box sx={{ margin: '1rem' }}>
       <Accordion defaultExpanded={true}>
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-          style={{ backgroundColor: '#0065bd', opacity: 0.91 }}>
-          <Typography color="white" fontWeight="bold">
+          expandIcon={<ExpandMoreIcon color="secondary" />}
+          aria-controls={`${name.replace(' ', '_')}-panel-header`}
+          id={`${name.replace(' ', '_')}-panel-header`}
+          sx={{ backgroundColor: 'primary.main' }}>
+          <Typography color="secondary" fontWeight="bold">
             {name}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>{display}</AccordionDetails>
+        <AccordionDetails style={{ padding: 0 }}>{display}</AccordionDetails>
       </Accordion>
-    </div>
+    </Box>
   );
 }
