@@ -6,8 +6,9 @@ const initialState: any = {
   tree: {
     name: ''
   },
-  allComponents: {},
-  allNodes: [],
+  componentsDict: {},
+  componentsList: [],
+  nodesList: [],
   dataPath: {
     nodes: [],
     links: []
@@ -21,8 +22,9 @@ export const graphDataSlice = createSlice({
     setGraphData: (state, action: PayloadAction<any>) => {
       state.initial = false;
       state.tree = action.payload?.tree;
-      state.allComponents = action.payload?.all_components;
-      state.allNodes = action.payload?.all_nodes;
+      state.componentsDict = action.payload?.components_dict;
+      state.componentsList = action.payload?.components_list;
+      state.nodesList = action.payload?.nodes_list;
       state.dataPath = action.payload?.data_path;
     },
     setNodeID: (state, action: PayloadAction<any>) => {
@@ -43,12 +45,14 @@ export const selectCurrentTree = (state) => {
     return state.graphData.tree;
   }
   return state.graphData.tree.children.filter((node) => {
-    return node.attributes.id === state.graphData.nodeID;
+    return node.id === state.graphData.nodeID;
   });
 };
 
-export const selectAllComponents = (state) => state.graphData.allComponents;
+export const selectComponentsDict = (state) => state.graphData.componentsDict;
 
-export const selectAllNodes = (state) => state.graphData.allNodes;
+export const selectComponentsList = (state) => state.graphData.componentsList;
+
+export const selectNodeList = (state) => state.graphData.nodesList;
 
 export const selectDataPath = (state) => state.graphData.dataPath;
