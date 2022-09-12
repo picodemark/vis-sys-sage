@@ -11,21 +11,20 @@ logger = logging.getLogger(__name__)
 class XMLParser:
 
     def __init__(self, xml_string):
-        """
-        :param xml_string: XML string to be parsed
-        """
         self.xml = xml_string
         self.converted_dict = self.__get_dict_from_xml()
-        self.unique_node_id = "addr"
-        self.all_components = {}
-        self.all_nodes = []
+        self.unique_component_id = "addr"
+        self.components_dict = {}
+        self.components_list = []
+        self.nodes_list = []
         self.data_path_nodes = []
 
     def get_data(self):
         data = {
             "tree": self.__get_component_tree(),
-            "all_components": self.all_components,
-            "all_nodes": self.all_nodes,
+            "components_dict": self.components_dict,
+            "components_list": self.components_list,
+            "nodes_list": self.nodes_list,
             "data_path": self.__get_data_path_graph()
         }
         return data
@@ -38,6 +37,17 @@ class XMLParser:
             (datetime.now() - start_time_xml_to_dict).total_seconds()
         )
         return converted_dict
+
+    def __assign_component_info(self, component_dict, node_id):
+        component_dict_obj = {
+            "node_id": node_id,
+            "component_id": component_dict["id"]
+        }
+        if "attributes" in component_dict:
+            component_dict_obj["attribues"] = component_dict["attributes"]
+
+        self.components_dict[component_dict["unique_component_id"]] = component_dict
+        self.components_list += [component_dict_obj]
 
     def __get_component_tree(self):
         sys_sage_dict = copy.deepcopy(self.converted_dict)
@@ -64,8 +74,10 @@ class XMLParser:
             # set name
             if key_lower[1:] == "name":
                 component_dict["name"] = value
-            elif key_lower[1:] == self.unique_node_id:
-                component_dict["unique_node_id"] = value
+            elif key_lower[1:] == self.unique_component_id:
+                component_dict["unique_component_id"] = value
+            elif key_lower[1:] == "id":
+                component_dict["id"] = value
             # set attributes and node info
             elif key_lower[0] == "@":
                 if "attributes" not in component_dict:
@@ -95,8 +107,8 @@ class XMLParser:
             # delete key
             del component_dict[key]
 
-        # set list of all components with most important characteristics
-        self.all_components[component_dict["unique_node_id"]] = node_id
+        # fill components dict and list
+        self.__assign_component_info(component_dict, node_id)
 
         # call recursive function for all children nodes
         if "children" in component_dict:
@@ -104,7 +116,8 @@ class XMLParser:
                 # root
                 if component_dict["name"] == "topology":
                     # the children of the topology are nodes
-                    self.all_nodes += [{
+                    node_id = child["@id"]
+                    self.nodes_list += [{
                         "id": child["@id"]
                     }]
                 self.__get_component_tree_rec(child, node_id)
