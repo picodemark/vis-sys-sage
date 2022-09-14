@@ -1,79 +1,114 @@
-import Avatar from '@mui/material/Avatar';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectComponentsDict } from '../../store/graphDataSlice';
 import { useState } from 'react';
-import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import AttributesTable from './component-tree/AttributesTable';
+import AttributesTable from '../tables/AttributesTable';
+
+const AVATAR_SIZES = {
+  small: {
+    dim: '35px',
+    fontSize: '20px'
+  },
+  medium: {
+    dim: '70px',
+    fontSize: '40px'
+  },
+  large: {
+    dim: '140px',
+    fontSize: '80px'
+  }
+};
 
 interface Props {
   id: string;
+  clickable: boolean;
+  size?: 'small' | 'medium' | 'large';
 }
 
 export default function ComponentAvatar(props: Props) {
-  const { id } = props;
+  const { id, clickable, size } = props;
 
-  const [label, setLabel] = useState('');
-  const [color, setColor] = useState('');
-  const [initial, setInitial] = useState(true);
+  const [avatarSize, setAvatarSize] = useState('medium');
 
   const [open, setOpen] = React.useState(false);
 
   const openDialog = () => {
-    setOpen(true);
+    if (clickable) {
+      setOpen(true);
+    }
   };
 
   const closeDialog = () => {
     setOpen(false);
   };
 
+  // get component info from store
   const selector = useSelector((state) => selectComponentsDict(state));
   const info = selector[id];
 
-  if (initial && info?.name !== undefined) {
+  const avatarConfig = {
+    label: 'UN ',
+    color: 'darkgrey'
+  };
+  if (info?.name !== undefined) {
     switch (info.name) {
       case 'topology':
-        setLabel('TL');
-        setColor('red');
+        avatarConfig.label = 'TR';
+        avatarConfig.color = 'red';
         break;
       case 'sys-sage node':
-        setLabel(`NO`);
-        setColor('purple');
+        avatarConfig.label = 'NO';
+        avatarConfig.color = 'purple';
         break;
       case 'Chip':
-        setLabel('CP');
-        setColor('blue');
+        avatarConfig.label = 'CP';
+        avatarConfig.color = 'blue';
         break;
       case 'cache':
-        setLabel(`L${info?.attributes?.cache_level}`);
-        setColor('brown');
+        avatarConfig.label = `L${info?.attributes?.cache_level}`;
+        avatarConfig.color = 'brown';
         break;
       case 'Numa':
-        setLabel('NA');
-        setColor('green');
+        avatarConfig.label = 'NA';
+        avatarConfig.color = 'green';
         break;
       case 'Core':
-        setLabel('CR');
-        setColor('orange');
+        avatarConfig.label = 'CR';
+        avatarConfig.color = 'orange';
         break;
       case 'Thread':
-        setLabel('TH');
-        setColor('pink');
+        avatarConfig.label = 'TH';
+        avatarConfig.color = 'pink';
         break;
-      default:
-        setLabel('UN');
-        setColor('darkgrey');
     }
-    setInitial(false);
+  }
+
+  if (size !== undefined) {
+    setAvatarSize(size);
   }
 
   return (
     <React.Fragment>
-      <Avatar onClick={openDialog} sx={{ backgroundColor: color }} aria-label="component-avatar">
-        {label}
-      </Avatar>
+      <div
+        onClick={openDialog}
+        style={{
+          width: AVATAR_SIZES[avatarSize].dim,
+          height: AVATAR_SIZES[avatarSize].dim,
+          lineHeight: AVATAR_SIZES[avatarSize].dim,
+          flexShrink: 0,
+          borderRadius: '50%',
+          color: '#fff',
+          backgroundColor: avatarConfig.color,
+          textAlign: 'center' as const,
+          fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
+          fontSize: AVATAR_SIZES[avatarSize].fontSize,
+          cursor: clickable ? 'pointer' : 'default'
+        }}>
+        {avatarConfig.label}
+      </div>
       <Dialog open={open} onClose={closeDialog} aria-describedby="alert-dialog-slide-description">
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
           {'Attributes of ' + info?.name}
