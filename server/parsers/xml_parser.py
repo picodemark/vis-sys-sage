@@ -40,11 +40,13 @@ class XMLParser:
 
     def __assign_component_info(self, component_dict, node_id):
         component_dict_obj = {
+            "name": component_dict["name"],
             "node_id": node_id,
-            "component_id": component_dict["id"]
+            "component_id": component_dict["id"],
+            "unique_component_id": component_dict["unique_component_id"]
         }
         if "attributes" in component_dict:
-            component_dict_obj["attribues"] = component_dict["attributes"]
+            component_dict_obj["attributes"] = component_dict["attributes"]
 
         self.components_dict[component_dict["unique_component_id"]] = component_dict
         self.components_list += [component_dict_obj]
