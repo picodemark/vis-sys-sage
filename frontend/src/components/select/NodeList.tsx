@@ -33,7 +33,7 @@ export default function NodeList() {
         <MenuItem value={'all'}>All Nodes</MenuItem>
         {selector.map((node, i) => (
           <MenuItem key={i} value={node.id}>
-            id: {node.id}
+            ID: {node.id}
           </MenuItem>
         ))}
       </Select>
