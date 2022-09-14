@@ -44,9 +44,10 @@ export const selectCurrentTree = (state) => {
   if (state.graphData.initial || state.graphData.nodeID === 'all') {
     return state.graphData.tree;
   }
-  return state.graphData.tree.children.filter((node) => {
-    return node.id === state.graphData.nodeID;
-  });
+  const filteredTree = state.graphData.tree.children.filter(
+    (node) => node.id === state.graphData.nodeID
+  );
+  return filteredTree[0];
 };
 
 export const selectComponentsDict = (state) => state.graphData.componentsDict;
