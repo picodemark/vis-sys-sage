@@ -8,12 +8,7 @@ export default function NavBar() {
   return (
     <AppBar position="relative">
       <Toolbar>
-        <Typography
-          variant="h5"
-          color="inherit"
-          fontWeight="bold"
-          component="div"
-          sx={{ flexGrow: 1 }}>
+        <Typography component="div" variant="h5" fontWeight="bold" flexGrow={1}>
           Vis-Sys-Sage
         </Typography>
         <GitHubButton />
