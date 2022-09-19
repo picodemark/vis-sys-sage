@@ -1,31 +1,28 @@
 import React from 'react';
-import NavBar from '../components/bars/NavBar';
-import ActionBar from '../components/bars/ActionBar';
-import Containers from '../components/containers/Containers';
+import NavBar from '../bars/NavBar';
+import ActionBar from '../bars/ActionBar';
+import Containers from '../containers/Containers';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { store } from '../store/store';
+import { store } from '../../store/store';
 import { Provider } from 'react-redux';
+import { StyledEngineProvider } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
     primary: {
-      light: '#fff',
-      main: '#0065bd',
-      dark: '#dad7cb',
-      contrastText: '#fff'
+      light: '#5E94D4',
+      main: '#3070B3'
     },
     secondary: {
       light: '#ff7961',
-      main: '#fff',
-      dark: '#ba000d',
-      contrastText: '#000'
+      main: '#ffffff'
     }
   }
 });
 
 export default function App() {
   return (
-    <div>
+    <StyledEngineProvider injectFirst>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <NavBar />
@@ -33,6 +30,6 @@ export default function App() {
           <Containers />
         </ThemeProvider>
       </Provider>
-    </div>
+    </StyledEngineProvider>
   );
 }
