@@ -8,7 +8,7 @@ import ComponentsButton from '../buttons/ComponentsButton';
 
 export default function ActionBar() {
   return (
-    <AppBar position="sticky" color="inherit" elevation={1}>
+    <AppBar position="sticky" color="secondary" elevation={1}>
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <Box display="flex" alignItems="center">
           <NodeList />
