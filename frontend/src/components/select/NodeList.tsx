@@ -1,16 +1,14 @@
 import * as React from 'react';
+import { useState } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useSelector } from 'react-redux';
-import { selectNodeList } from '../../store/graphDataSlice';
-import { useState } from 'react';
-import { setNodeID } from '../../store/graphDataSlice';
-import { useAppDispatch } from '../../app/hooks';
+import { selectNodeList, setNodeID } from '../../store/graphDataSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 export default function NodeList() {
-  const selector = useSelector((state) => selectNodeList(state));
+  const selector = useAppSelector((state) => selectNodeList(state));
 
   const [selectedNode, setSelectedNode] = useState('all');
 
@@ -22,17 +20,12 @@ export default function NodeList() {
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+    <FormControl size="small" sx={{ m: 1, minWidth: 120 }}>
       <InputLabel id="node-select">Nodes</InputLabel>
-      <Select
-        labelId="node-select"
-        id="node-select"
-        value={selectedNode}
-        label="Nodes"
-        onChange={handleChange}>
+      <Select labelId="node-select" value={selectedNode} label="Nodes" onChange={handleChange}>
         <MenuItem value={'all'}>All Nodes</MenuItem>
-        {selector.map((node, i) => (
-          <MenuItem key={i} value={node.id}>
+        {selector.map((node, index) => (
+          <MenuItem key={index} value={node.id}>
             ID: {node.id}
           </MenuItem>
         ))}
