@@ -1,8 +1,8 @@
 import * as React from 'react';
+import { useRef, useState } from 'react';
 import Button from '@mui/material/Button';
 import axios from 'axios';
-import { useRef, useState } from 'react';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch } from '../../hooks/hooks';
 import { setGraphData } from '../../store/graphDataSlice';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -13,8 +13,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 });
 
 export default function UploadButton() {
-  const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState('success');
+  const [open, setOpen] = useState<boolean>(false);
+  const [status, setStatus] = useState<string>('success');
 
   const inputFile = useRef(null);
   const dispatch = useAppDispatch();
@@ -37,21 +37,25 @@ export default function UploadButton() {
         }
       });
 
-      // set status
+      // set success message
       setOpen(true);
       setStatus('success');
 
       // update global graph data
       dispatch(setGraphData(data));
 
-      // reset to allow to upload same file again
+      // reset to allow re-uploading file with same filename
       inputFile.current.value = null;
     } catch (e) {
+      // log error
       if (axios.isAxiosError(e)) {
         console.log(e.message);
       } else {
         console.log(e);
       }
+
+      // show error message
+      setOpen(true);
       setStatus('error');
     }
   };
@@ -63,8 +67,8 @@ export default function UploadButton() {
         open={open}
         autoHideDuration={2000}
         onClose={handleClose}>
-        <Alert onClose={handleClose} severity={status == 'success' ? 'success' : 'error'}>
-          Upload was {status === 'success' && 'not'} successful!
+        <Alert onClose={handleClose} severity={status === 'success' ? 'success' : 'error'}>
+          Upload was {status === 'success' ? '' : 'not'} successful!
         </Alert>
       </Snackbar>
       <input
