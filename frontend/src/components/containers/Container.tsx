@@ -19,8 +19,6 @@ export default function Container(props: Props) {
       <Accordion defaultExpanded={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon color="secondary" />}
-          aria-controls={`${name.replace(' ', '_')}-panel-header`}
-          id={`${name.replace(' ', '_')}-panel-header`}
           sx={{ backgroundColor: 'primary.main' }}>
           <Typography color="secondary" fontWeight="bold">
             {name}
