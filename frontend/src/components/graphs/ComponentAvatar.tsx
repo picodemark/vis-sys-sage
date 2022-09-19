@@ -1,11 +1,9 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectComponentsDict } from '../../store/graphDataSlice';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import AttributesTable from '../tables/AttributesTable';
+import { Attributes } from '../../types/types';
 
 const AVATAR_SIZES = {
   small: {
@@ -23,17 +21,20 @@ const AVATAR_SIZES = {
 };
 
 interface Props {
-  id: string;
-  clickable: boolean;
+  label: string;
+  cacheLevel?: number;
+  attributes?: Attributes;
   size?: 'small' | 'medium' | 'large';
 }
 
 export default function ComponentAvatar(props: Props) {
-  const { id, clickable, size } = props;
+  const { label, cacheLevel, attributes, size } = props;
 
   const [avatarSize, setAvatarSize] = useState('medium');
 
   const [open, setOpen] = React.useState(false);
+
+  const clickable = attributes !== undefined ? Object.keys(attributes).length > 1 : false;
 
   const openDialog = () => {
     if (clickable) {
@@ -45,45 +46,39 @@ export default function ComponentAvatar(props: Props) {
     setOpen(false);
   };
 
-  // get component info from store
-  const selector = useSelector((state) => selectComponentsDict(state));
-  const info = selector[id];
-
   const avatarConfig = {
     label: 'UN ',
     color: 'darkgrey'
   };
-  if (info?.name !== undefined) {
-    switch (info.name) {
-      case 'topology':
-        avatarConfig.label = 'TR';
-        avatarConfig.color = 'red';
-        break;
-      case 'sys-sage node':
-        avatarConfig.label = 'NO';
-        avatarConfig.color = 'purple';
-        break;
-      case 'Chip':
-        avatarConfig.label = 'CP';
-        avatarConfig.color = 'blue';
-        break;
-      case 'cache':
-        avatarConfig.label = `L${info?.attributes?.cache_level}`;
-        avatarConfig.color = 'brown';
-        break;
-      case 'Numa':
-        avatarConfig.label = 'NA';
-        avatarConfig.color = 'green';
-        break;
-      case 'Core':
-        avatarConfig.label = 'CR';
-        avatarConfig.color = 'orange';
-        break;
-      case 'Thread':
-        avatarConfig.label = 'TH';
-        avatarConfig.color = 'pink';
-        break;
-    }
+  switch (label) {
+    case 'topology':
+      avatarConfig.label = 'TR';
+      avatarConfig.color = 'red';
+      break;
+    case 'sys-sage node':
+      avatarConfig.label = 'NO';
+      avatarConfig.color = 'purple';
+      break;
+    case 'Chip':
+      avatarConfig.label = 'CP';
+      avatarConfig.color = 'blue';
+      break;
+    case 'cache':
+      avatarConfig.label = `L${cacheLevel ?? ''}`;
+      avatarConfig.color = 'brown';
+      break;
+    case 'Numa':
+      avatarConfig.label = 'NA';
+      avatarConfig.color = 'green';
+      break;
+    case 'Core':
+      avatarConfig.label = 'CR';
+      avatarConfig.color = 'orange';
+      break;
+    case 'Thread':
+      avatarConfig.label = 'TH';
+      avatarConfig.color = 'pink';
+      break;
   }
 
   if (size !== undefined) {
@@ -100,7 +95,7 @@ export default function ComponentAvatar(props: Props) {
           lineHeight: AVATAR_SIZES[avatarSize].dim,
           flexShrink: 0,
           borderRadius: '50%',
-          color: '#fff',
+          color: '#ffffff',
           backgroundColor: avatarConfig.color,
           textAlign: 'center' as const,
           fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
@@ -109,12 +104,10 @@ export default function ComponentAvatar(props: Props) {
         }}>
         {avatarConfig.label}
       </div>
-      <Dialog open={open} onClose={closeDialog} aria-describedby="alert-dialog-slide-description">
-        <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          {'Attributes of ' + info?.name}
-        </DialogTitle>
-        <DialogContent id="alert-dialog-slide-description" sx={{ padding: 0 }}>
-          {info?.attributes !== undefined && <AttributesTable rowData={info?.attributes} />}
+      <Dialog open={open} onClose={closeDialog}>
+        <DialogTitle style={{ cursor: 'move' }}>{'Attributes of ' + label}</DialogTitle>
+        <DialogContent sx={{ padding: 0 }}>
+          {attributes !== undefined && <AttributesTable rowData={attributes} />}
         </DialogContent>
       </Dialog>
     </React.Fragment>
