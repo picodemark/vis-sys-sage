@@ -7,25 +7,30 @@ import xmltodict
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+UNIQUE_COMPONENT_ID = "addr"
+
+DATA_PATH_TYPES = {
+    "32": "NONE",
+    "64": "LOGICAL",
+    "128": "PHYSICAL",
+    "256": "L3CAT"
+}
+
 
 class XMLParser:
-
     def __init__(self, xml_string):
         self.xml = xml_string
         self.converted_dict = self.__get_dict_from_xml()
-        self.unique_component_id = "addr"
         self.components_dict = {}
         self.components_list = []
         self.nodes_list = []
-        self.data_path_nodes = []
 
     def get_data(self):
         data = {
             "tree": self.__get_component_tree(),
-            "components_dict": self.components_dict,
-            "components_list": self.components_list,
-            "nodes_list": self.nodes_list,
-            "data_path": self.__get_data_path_graph()
+            "componentsList": self.components_list,
+            "nodesList": self.nodes_list,
+            "dataPath": self.__get_data_path_graph()
         }
         return data
 
@@ -41,15 +46,20 @@ class XMLParser:
     def __assign_component_info(self, component_dict, node_id):
         component_dict_obj = {
             "name": component_dict["name"],
-            "node_id": node_id,
-            "component_id": component_dict["id"],
-            "unique_component_id": component_dict["unique_component_id"]
+            "nodeID": node_id,
+            "componentID": component_dict["id"],
+            "uniqueComponentID": component_dict["uniqueComponentID"]
         }
         if "attributes" in component_dict:
             component_dict_obj["attributes"] = component_dict["attributes"]
 
-        self.components_dict[component_dict["unique_component_id"]] = component_dict
-        self.components_list += [component_dict_obj]
+        self.components_dict[component_dict["uniqueComponentID"]] = component_dict_obj
+        self.components_list.append(component_dict_obj)
+
+    def __get_component_info(self, unique_component_id):
+        if unique_component_id in self.components_dict:
+            return self.components_dict[unique_component_id]
+        return {}
 
     def __get_component_tree(self):
         sys_sage_dict = copy.deepcopy(self.converted_dict)
@@ -76,8 +86,8 @@ class XMLParser:
             # set name
             if key_lower[1:] == "name":
                 component_dict["name"] = value
-            elif key_lower[1:] == self.unique_component_id:
-                component_dict["unique_component_id"] = value
+            elif key_lower[1:] == UNIQUE_COMPONENT_ID:
+                component_dict["uniqueComponentID"] = value
             elif key_lower[1:] == "id":
                 component_dict["id"] = value
             # set attributes and node info
@@ -97,7 +107,7 @@ class XMLParser:
             # set children
             elif isinstance(value, dict):
                 if "children" in component_dict:
-                    component_dict["children"] += [value]
+                    component_dict["children"].append(value)
                 else:
                     component_dict["children"] = [value]
             elif isinstance(value, list):
@@ -117,44 +127,95 @@ class XMLParser:
             for child in component_dict["children"]:
                 # root
                 if component_dict["name"] == "topology":
-                    # the children of the topology are nodes
+                    # the children of topology component are nodes
                     node_id = child["@id"]
-                    self.nodes_list += [{
+                    self.nodes_list.append({
                         "id": child["@id"]
-                    }]
+                    })
                 self.__get_component_tree_rec(child, node_id)
 
     def __get_data_path_graph(self):
         sys_sage_dict = copy.deepcopy(self.converted_dict)
 
-        data_path_dict = sys_sage_dict["sys-sage"]["data-paths"]["datapath"]
+        data_paths = sys_sage_dict["sys-sage"]["data-paths"]["datapath"]
 
         start_time_get_data_path = datetime.now()
 
-        unique_data_path_nodes = {}
+        components_per_node = {}
 
-        for data_path in data_path_dict:
-            copy_dict = copy.deepcopy(data_path)
+        links_per_node = {}
 
-            for key, value in copy_dict.items():
+        link_attributes = {}
+
+        for data_path in data_paths:
+            source = data_path["@source"]
+            node_id_source = self.components_dict[source]["nodeID"]
+
+            if node_id_source not in components_per_node:
+                components_per_node[node_id_source] = {}
+
+            if source not in components_per_node[node_id_source]:
+                components_per_node[node_id_source][source] = True
+
+            del data_path["@source"]
+
+            target = data_path["@target"]
+            node_id_target = self.components_dict[target]["nodeID"]
+
+            if node_id_target not in components_per_node:
+                components_per_node[node_id_target] = {}
+
+            if target not in components_per_node[node_id_target]:
+                components_per_node[node_id_target][target] = True
+
+            del data_path["@target"]
+
+            if node_id_source not in links_per_node:
+                links_per_node[node_id_source] = []
+
+            if source not in link_attributes or target not in link_attributes[source]:
+                links_per_node[node_id_source].append({
+                    "source": source,
+                    "target": target
+                })
+
+            if source not in link_attributes:
+                link_attributes[source] = {}
+
+            if target not in link_attributes[source]:
+                link_attributes[source][target] = []
+
+            attributes = {}
+            for key, value in data_path.items():
                 key_lower = key.lower()
 
-                if key_lower[1:] == "source" or key_lower[1:] == "target":
-                    unique_data_path_nodes[data_path[key]] = True
-
                 if key_lower[0] == "@":
-                    data_path[key[1:]] = data_path[key]
+                    if key_lower[1:] == "dp_type":
+                        attributes["type"] = DATA_PATH_TYPES[value] if value in DATA_PATH_TYPES else "CUSTOM"
+                    elif key_lower[1:] == "latency" or key_lower[1:] == "bw":
+                        attributes[key[1:]] = value
+                    else:
+                        if "moreInfo" not in attributes:
+                            attributes["moreInfo"] = []
+                        attributes["moreInfo"].append({
+                            "name": key[1:],
+                            "value": value
+                        })
                 elif key_lower == "attribute":
                     if isinstance(data_path[key], list):
                         for attribute_obj in data_path[key]:
-                            data_path[attribute_obj["@name"]] = attribute_obj["@value"]
+                            attributes[attribute_obj["@name"]] = attribute_obj["@value"]
                     else:
-                        data_path[data_path[key]["@name"]] = data_path[key]["@value"]
+                        attributes[data_path[key]["@name"]] = data_path[key]["@value"]
 
-                # delete key
-                del data_path[key]
+            link_attributes[source][target].append(attributes)
 
-        data_path_nodes = [{"id": unique_id} for unique_id in unique_data_path_nodes.keys()]
+        # adjust
+        for node in components_per_node.keys():
+            components_per_node[node] = [{
+                "id": component,
+                "info": self.__get_component_info(component)
+            } for component in components_per_node[node].keys()]
 
         logger.info(
             "dt[xml_to_dict]: %s",
@@ -162,6 +223,7 @@ class XMLParser:
         )
 
         return {
-            "nodes": data_path_nodes,
-            "links": data_path_dict
+            "nodes": components_per_node,
+            "links": links_per_node,
+            "attributes": link_attributes
         }
