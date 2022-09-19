@@ -1,19 +1,38 @@
 import { Graph } from 'react-d3-graph';
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
-
-import { selectDataPath } from '../../../store/graphDataSlice';
-import DataGraphComponent from './DataGraphComponent';
+import { MemoDataGraphComponent } from './DataPathComponent';
+import { useAppSelector } from '../../../hooks/hooks';
+import { selectFilteredDataPath } from '../../../store/graphDataSlice';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DataPathTable from '../../tables/DataPathTable';
 
 export default function DataPathGraph() {
-  const selector = useSelector((state) => selectDataPath(state));
+  const filteredGraphDataSelector = useAppSelector((state) => selectFilteredDataPath(state));
 
   const [extraConfig, setExtraConfig] = useState({});
 
-  const box = useRef(null);
+  const [keyCount, setKeyCount] = useState<number>(0);
+
+  const [open, setOpen] = React.useState(false);
+
+  const [link, setLink] = useState({
+    source: '',
+    target: ''
+  });
+
+  const openDialog = () => {
+    setOpen(true);
+  };
+
+  const closeDialog = () => {
+    setOpen(false);
+  };
+
+  const box = useRef<HTMLDivElement>();
 
   const setGraphWidth = () => {
     if (box?.current?.offsetWidth !== undefined) {
@@ -21,37 +40,79 @@ export default function DataPathGraph() {
     }
   };
 
+  const forceReMount = () => {
+    setKeyCount(keyCount + 1);
+  };
+
   useEffect(() => {
+    forceReMount();
     setGraphWidth();
     window.addEventListener('resize', setGraphWidth);
   }, []);
 
+  // re-mount graph only when data from store changes
+  useMemo(() => forceReMount(), [filteredGraphDataSelector]);
+
+  const onClickLink = (source: string, target: string) => {
+    setLink({
+      source: source,
+      target: target
+    });
+    openDialog();
+  };
+
   const config = {
-    height: 500,
-    highlightDegree: 1,
-    nodeHighlightBehavior: true,
+    height: 1000, // height of rendered SVG
+    highlightDegree: 1, // highlight only neighbouring links
+    nodeHighlightBehavior: true, // highlight all nodes on mouse-over
+    linkHighlightBehavior: true, // highlight all nodes on mouse-over
     d3: {
       gravity: -1000,
-      linkLength: 150,
+      linkLength: 300,
       linkStrength: 1,
-      alphaTarget: 0.05
+      alphaTarget: 0.05,
+      disableLinkForce: false
     },
     node: {
-      renderLabel: false,
-      color: 'lightgreen',
-      size: 400,
-      highlightStrokeColor: 'blue',
-      viewGenerator: (node) => <DataGraphComponent {...node}></DataGraphComponent>
+      renderLabel: false, // not render label
+      size: 1200, // node size
+      viewGenerator: (node) => (
+        <MemoDataGraphComponent id={node.id} info={node.info}></MemoDataGraphComponent>
+      )
     },
     link: {
-      highlightColor: 'red'
+      highlightColor: '#0065bd', // color when highlighted
+      strokeWidth: 10 // link width
     },
     ...extraConfig
   };
 
   return (
-    <Box sx={{ width: '100%' }} ref={box}>
-      <Graph id="data-path-graph" data={Object.assign({}, selector)} config={config} />
-    </Box>
+    <React.Fragment>
+      <Box sx={{ width: '100%', cursor: 'grab' }} ref={box}>
+        <Graph
+          key={keyCount} // force data-path graph to re-mount
+          id="data-path-graph" // ID of data-path graph wrapper
+          data={filteredGraphDataSelector} // data
+          config={config} // config
+          onClickLink={onClickLink}
+        />
+      </Box>
+      <Dialog open={open} onClose={closeDialog} maxWidth="xl">
+        <DialogTitle style={{ cursor: 'move' }}>
+          {'Data-Paths between :' + link.source + ' and ' + link.target}{' '}
+        </DialogTitle>
+        <DialogContent sx={{ padding: 0 }}>
+          <Box display={'flex'} width={'100%'} minHeight={400}>
+            <Box width={500} sx={{ borderRight: 1, borderColor: 'grey.500' }}>
+              <DataPathTable source={link.source} target={link.target} />
+            </Box>
+            <Box width={500}>
+              <DataPathTable source={link.target} target={link.source} />
+            </Box>
+          </Box>
+        </DialogContent>
+      </Dialog>
+    </React.Fragment>
   );
 }
