@@ -7,40 +7,30 @@ import Link from '@mui/material/Link';
 
 export default function GitHubButton() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   return (
     <React.Fragment>
-      <IconButton
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-        color="secondary">
+      <IconButton onClick={handleClick} color="secondary">
         <GitHubIcon />
       </IconButton>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button'
-        }}>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={handleClose}>
           <Link
-            href="https://github.com/stepanvanecek/sys-sage"
+            href="https://github.com/caps-tum/sys-sage"
             underline="none"
             target="_blank"
             rel="noopener">
-            {'sys-sage'}
+            sys-sage
           </Link>
         </MenuItem>
         <MenuItem onClick={handleClose}>
@@ -49,7 +39,7 @@ export default function GitHubButton() {
             underline="none"
             target="_blank"
             rel="noopener">
-            {'vis-sys-sage'}
+            vis-sys-sage
           </Link>
         </MenuItem>
       </Menu>
