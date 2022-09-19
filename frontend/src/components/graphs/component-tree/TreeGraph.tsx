@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Tree from 'react-d3-tree';
-import { useSelector } from 'react-redux';
 import { Toolbar } from '@mui/material';
 import TreeComponent from './TreeComponent';
 import { selectCurrentTree } from '../../../store/graphDataSlice';
@@ -10,68 +9,71 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
 import Button from '@mui/material/Button';
+import { useAppSelector } from '../../../hooks/hooks';
+import { Point } from 'react-d3-tree/lib/types/common';
 
-const MAX_DEPTH = Number.MAX_SAFE_INTEGER;
+// maximum depth is set to be unrealistically high to show all components
+const MAX_DEPTH = Number.MAX_SAFE_INTEGER as number;
 
 export default function TreeGraph() {
-  const selector = useSelector((state) => selectCurrentTree(state));
+  const treeSelector = useAppSelector((state) => selectCurrentTree(state));
 
-  const [count, setCount] = useState(0);
-  const [initialDepth, setInitialDepth] = useState(1);
-  const [translate, setTranslate] = useState({
+  const [keyCount, setKeyCount] = useState<number>(0);
+  const [initialDepth, setInitialDepth] = useState<number>(1);
+  const [translate, setTranslate] = useState<Point>({
     x: 0,
     y: 0
   });
 
-  const box = useRef(null);
+  const box = useRef<HTMLDivElement>();
 
-  const centerGraph = () => {
-    setCount(count + 1);
+  const reMountGraph = () => {
+    setKeyCount(keyCount + 1);
   };
 
-  const setPosition = () => {
+  const centerGraph = () => {
     setTranslate({ x: box.current.offsetWidth / 2, y: box.current.offsetHeight / 10 });
   };
 
   const handleInitialDepthSwitch = (event) => {
     event.target.checked ? setInitialDepth(MAX_DEPTH) : setInitialDepth(1);
-    setCount(count + 1);
+    reMountGraph();
   };
 
   useEffect(() => {
-    setPosition();
+    // center graph on re-render
+    centerGraph();
   }, []);
 
   return (
     <React.Fragment>
       <Toolbar variant="dense">
         <FormControlLabel
-          value="end"
           control={<Switch color="primary" onChange={handleInitialDepthSwitch} />}
           label="Show All"
           labelPlacement="end"
         />
         <Button
-          onClick={centerGraph}
           size="small"
           variant="outlined"
+          onClick={centerGraph}
           startIcon={<CenterFocusWeakIcon />}>
           Center
         </Button>
       </Toolbar>
       <Box sx={{ width: '100%', height: '1000px' }} ref={box}>
-        {Object.keys(selector).length > 1 && (
+        {Object.keys(treeSelector).length > 1 && (
           <Tree
-            key={count}
-            data={selector}
-            pathFunc={'step'}
-            translate={translate}
-            orientation={'vertical'}
-            renderCustomNodeElement={TreeComponent}
-            depthFactor={270}
-            initialDepth={initialDepth}
-            separation={{ siblings: 2, nonSiblings: 2 }}
-            transitionDuration={0}
+            key={keyCount} // force tree graph to re-mount
+            data={treeSelector} // tree graph data from global store
+            pathFunc={'step'} // paths styled as steps
+            translate={translate} // translate tree graph to given position
+            orientation={'vertical'} // vertical graph
+            renderCustomNodeElement={TreeComponent} // custom tree component element
+            depthFactor={270} // minimum distance between parent and children components
+            initialDepth={initialDepth} // control initial depth
+            separation={{ siblings: 2, nonSiblings: 2 }} // minimum distance between components
+            transitionDuration={0} // maximum performance
           />
         )}
       </Box>
