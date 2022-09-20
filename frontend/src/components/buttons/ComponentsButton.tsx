@@ -1,15 +1,16 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import { selectComponentsList } from '../../store/graphDataSlice';
-import { useSelector } from 'react-redux';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import ComponentsTable from '../tables/ComponentsTable';
 import GridViewIcon from '@mui/icons-material/GridView';
+import { useAppSelector } from '../../hooks/hooks';
+import DraggablePaperComponent from '../DraggablePaperComponent';
 
 export default function ComponentsButton() {
-  const selector = useSelector((state) => selectComponentsList(state));
+  const componentsListSelector = useAppSelector((state) => selectComponentsList(state));
 
   const [open, setOpen] = React.useState<boolean>(false);
 
@@ -26,10 +27,15 @@ export default function ComponentsButton() {
       <Button onClick={openDialog} variant="outlined" startIcon={<GridViewIcon />}>
         Components
       </Button>
-      <Dialog open={open} onClose={closeDialog} maxWidth="xl">
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        PaperComponent={DraggablePaperComponent}
+        hideBackdrop={true}
+        maxWidth="xl">
         <DialogTitle style={{ cursor: 'move' }}>All Components</DialogTitle>
         <DialogContent sx={{ padding: 0 }}>
-          <ComponentsTable rowData={selector} />
+          <ComponentsTable rowData={componentsListSelector} />
         </DialogContent>
       </Dialog>
     </React.Fragment>
