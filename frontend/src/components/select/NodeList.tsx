@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 export default function NodeList() {
   const selector = useAppSelector((state) => selectNodeList(state));
 
-  const [selectedNode, setSelectedNode] = useState('all');
+  const [selectedNode, setSelectedNode] = useState<string>('all');
 
   const dispatch = useAppDispatch();
 
