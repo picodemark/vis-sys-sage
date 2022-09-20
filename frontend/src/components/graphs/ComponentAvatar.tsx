@@ -4,6 +4,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import AttributesTable from '../tables/AttributesTable';
 import { Attributes } from '../../types/types';
+import Box from '@mui/material/Box';
+import '../DraggablePaperComponent';
+import DraggablePaperComponent from '../DraggablePaperComponent';
 
 const AVATAR_SIZES = {
   small: {
@@ -30,9 +33,9 @@ interface Props {
 export default function ComponentAvatar(props: Props) {
   const { label, cacheLevel, attributes, size } = props;
 
-  const [avatarSize, setAvatarSize] = useState('medium');
+  const [avatarSize, setAvatarSize] = useState<string>('medium');
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState<boolean>(false);
 
   const clickable = attributes !== undefined ? Object.keys(attributes).length > 1 : false;
 
@@ -104,10 +107,18 @@ export default function ComponentAvatar(props: Props) {
         }}>
         {avatarConfig.label}
       </div>
-      <Dialog open={open} onClose={closeDialog}>
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        PaperComponent={DraggablePaperComponent}
+        hideBackdrop={true}>
         <DialogTitle style={{ cursor: 'move' }}>{'Attributes of ' + label}</DialogTitle>
         <DialogContent sx={{ padding: 0 }}>
-          {attributes !== undefined && <AttributesTable rowData={attributes} />}
+          {attributes !== undefined && (
+            <Box minWidth={600}>
+              <AttributesTable rowData={attributes} />
+            </Box>
+          )}
         </DialogContent>
       </Dialog>
     </React.Fragment>
