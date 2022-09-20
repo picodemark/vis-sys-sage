@@ -8,7 +8,7 @@ import { selectFilteredDataPath, setClickedComponents } from '../../../store/gra
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import NewDataPathTable from '../../tables/NewDataPathTable';
+import DataPathTable from '../../tables/DataPathTable';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
@@ -122,10 +122,10 @@ export default function DataPathGraph() {
               </Tabs>
             </Box>
             <Box hidden={value !== 0} width={1000}>
-              {value === 0 && <NewDataPathTable source={link.source} target={link.target} />}
+              {value === 0 && <DataPathTable source={link.source} target={link.target} />}
             </Box>
             <Box hidden={value !== 1} width={1000}>
-              {value === 1 && <NewDataPathTable source={link.target} target={link.source} />}
+              {value === 1 && <DataPathTable source={link.target} target={link.source} />}
             </Box>
           </Box>
         </DialogContent>
