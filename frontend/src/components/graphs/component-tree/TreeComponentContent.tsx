@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { CustomNodeElementProps, TreeNodeDatum } from 'react-d3-tree/lib/types/common';
 import ComponentAvatar from '../ComponentAvatar';
 import TreeComponentArrow from './TreeComponentArrow';
-import { useSelector } from 'react-redux';
-import { selectClickedComponent } from '../../../store/graphDataSlice';
-import { useAppDispatch } from '../../../hooks/hooks';
+import { selectClickedComponents } from '../../../store/graphDataSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 
-import { setClickedComponent } from '../../../store/graphDataSlice';
+import { setClickedComponents } from '../../../store/graphDataSlice';
 
 interface CustomTreeNodeDatum extends TreeNodeDatum {
   id?: string;
@@ -23,14 +22,14 @@ export default function TreeComponentContent(props: AdaptedCustomNodeElementProp
 
   const dispatch = useAppDispatch();
 
-  const clickedComponentSelector = useSelector(
-    (state) => selectClickedComponent(state) === nodeDatum.uniqueComponentID
+  const clickedComponentSelector = useAppSelector(
+    (state) => selectClickedComponents(state).indexOf(nodeDatum.uniqueComponentID) > -1
   );
 
-  const [highlight, setHighlight] = useState(false);
+  const [highlight, setHighlight] = useState<boolean>(false);
 
   const triggerHighlight = () => {
-    dispatch(setClickedComponent(nodeDatum.uniqueComponentID));
+    dispatch(setClickedComponents([nodeDatum.uniqueComponentID]));
   };
 
   // highlight only when component ID is the same
