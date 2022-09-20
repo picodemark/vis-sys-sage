@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import ComponentAvatar from '../ComponentAvatar';
-import { useSelector } from 'react-redux';
-import { selectClickedComponent, setClickedComponent } from '../../../store/graphDataSlice';
-import { useAppDispatch } from '../../../hooks/hooks';
+import { selectClickedComponents, setClickedComponents } from '../../../store/graphDataSlice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 import { Attributes } from '../../../types/types';
 
 interface Props {
@@ -13,13 +12,15 @@ interface Props {
 function DataPathComponent(props: Props) {
   const { id, info } = props;
 
-  const clickedComponentSelector = useSelector((state) => selectClickedComponent(state) === id);
+  const clickedComponentSelector = useAppSelector(
+    (state) => selectClickedComponents(state).indexOf(id) > -1
+  );
   const dispatch = useAppDispatch();
 
-  const [highlight, setHighlight] = useState(false);
+  const [highlight, setHighlight] = useState<boolean>(false);
 
   const triggerHighlight = () => {
-    dispatch(setClickedComponent(id));
+    dispatch(setClickedComponents([id]));
   };
 
   // highlight only when component ID is the same

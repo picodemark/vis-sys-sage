@@ -9,8 +9,8 @@ interface Props {
   componentsList: ComponentListItem[];
   nodesList: NodeListItem[];
   dataPath: any;
-  dataPathLinkAttributes: [];
-  clickedComponent: string;
+  dataPathLinkAttributes: any;
+  clickedComponents: string[];
 }
 
 const initialState: Props = {
@@ -25,7 +25,7 @@ const initialState: Props = {
     links: []
   },
   dataPathLinkAttributes: [],
-  clickedComponent: ''
+  clickedComponents: []
 };
 
 export const graphDataSlice = createSlice({
@@ -45,18 +45,18 @@ export const graphDataSlice = createSlice({
       state.nodeID = 'all';
 
       // no component selected
-      state.clickedComponent = '';
+      state.clickedComponents = [];
     },
     setNodeID: (state, action: PayloadAction<string>) => {
       state.nodeID = action.payload;
     },
-    setClickedComponent: (state, action: PayloadAction<string>) => {
-      state.clickedComponent = action.payload;
+    setClickedComponents: (state, action: PayloadAction<string[]>) => {
+      state.clickedComponents = action.payload;
     }
   }
 });
 
-export const { setGraphData, setNodeID, setClickedComponent } = graphDataSlice.actions;
+export const { setGraphData, setNodeID, setClickedComponents } = graphDataSlice.actions;
 
 export default graphDataSlice.reducer;
 
@@ -110,4 +110,4 @@ export const selectFilteredDataPath = createSelector(
 
 export const selectDataPathLinkAttributes = (state) => state.graphData.dataPathLinkAttributes;
 
-export const selectClickedComponent = (state) => state.graphData.clickedComponent;
+export const selectClickedComponents = (state) => state.graphData.clickedComponents;
