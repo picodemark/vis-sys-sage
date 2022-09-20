@@ -19,7 +19,9 @@ export default function TreeGraph() {
   const treeSelector = useAppSelector((state) => selectCurrentTree(state));
 
   const [keyCount, setKeyCount] = useState<number>(0);
+
   const [initialDepth, setInitialDepth] = useState<number>(1);
+
   const [translate, setTranslate] = useState<Point>({
     x: 0,
     y: 0
