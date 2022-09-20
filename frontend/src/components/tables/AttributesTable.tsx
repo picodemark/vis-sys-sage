@@ -1,41 +1,40 @@
-import * as React from 'react';
-import { DataGrid, GridColDef, GridToolbarQuickFilter } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
+import React from 'react';
+import MUIDataTable from 'mui-datatables';
 
-const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Name', headerClassName: 'datagrid--header', flex: 1 },
-  { field: 'value', headerName: 'Value', headerClassName: 'datagrid--header', flex: 1 }
-];
-
-const createRowData = (data: Record<string, string | number | boolean>) => {
-  return Object.keys(data.rowData).map((key) => ({ name: key, value: data.rowData[key] }));
-};
-
-function QuickSearchToolbar() {
-  return (
-    <Box
-      sx={{
-        p: 0.5,
-        pb: 0
-      }}>
-      <GridToolbarQuickFilter />
-    </Box>
-  );
+interface Props {
+  rowData: any;
 }
 
-export default function AttributesTable(rowData) {
-  return (
-    <div style={{ height: 400, width: 600 }}>
-      <DataGrid
-        disableColumnMenu
-        rows={createRowData(rowData)}
-        getRowId={(row) => row.name}
-        columns={columns}
-        components={{ Toolbar: QuickSearchToolbar }}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        sx={{ padding: 0 }}
-      />
-    </div>
-  );
+export default function AttributesTable(props: Props) {
+  const { rowData } = props;
+
+  const columns = [
+    {
+      name: 'name',
+      label: 'Name',
+      width: '30%'
+    },
+    {
+      name: 'value',
+      label: 'Value',
+      width: '70%'
+    }
+  ];
+
+  const createRowData = (data: Record<string, string | number | boolean>) => {
+    return Object.keys(data).map((key) => ({ name: key, value: data[key] }));
+  };
+
+  const options = {
+    empty: true,
+    download: false,
+    print: false,
+    filter: false,
+    selectableRowsHideCheckboxes: true,
+    responsive: 'scrollMaxHeight',
+    rowsPerPage: 5,
+    elevation: 0
+  };
+
+  return <MUIDataTable data={createRowData(rowData)} columns={columns} options={options} />;
 }
