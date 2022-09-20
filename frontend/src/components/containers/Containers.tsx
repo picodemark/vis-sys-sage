@@ -6,8 +6,8 @@ import DataPathGraph from '../graphs/data-paths/DataPathGraph';
 export default function Containers() {
   return (
     <React.Fragment>
-      <Container name={'Component Tree'} display={<TreeGraph />} />
-      <Container name={'Data Paths'} display={<DataPathGraph />} />
+      <Container name={'Component Tree'} content={<TreeGraph />} />
+      <Container name={'Data Paths'} content={<DataPathGraph />} />
     </React.Fragment>
   );
 }

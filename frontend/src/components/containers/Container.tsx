@@ -8,11 +8,11 @@ import Box from '@mui/material/Box';
 
 interface Props {
   name: string;
-  display: React.ReactNode;
+  content: React.ReactNode;
 }
 
 export default function Container(props: Props) {
-  const { name, display } = props;
+  const { name, content } = props;
 
   return (
     <Box sx={{ margin: '1rem' }}>
@@ -24,7 +24,7 @@ export default function Container(props: Props) {
             {name}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails style={{ padding: 0 }}>{display}</AccordionDetails>
+        <AccordionDetails style={{ padding: 0 }}>{content}</AccordionDetails>
       </Accordion>
     </Box>
   );
