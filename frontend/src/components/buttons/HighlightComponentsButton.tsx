@@ -1,15 +1,16 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import { useAppDispatch } from '../../hooks/hooks';
 import { setHighlightedComponents } from '../../store/graphDataSlice';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import Tooltip from '@mui/material/Tooltip';
 
 interface Props {
-  label: string;
   components: string[];
 }
 
 export default function HighlightComponentsButton(props: Props) {
-  const { label, components } = props;
+  const { components } = props;
 
   const dispatch = useAppDispatch();
 
@@ -18,8 +19,10 @@ export default function HighlightComponentsButton(props: Props) {
   };
 
   return (
-    <Button onClick={highlightComponents} variant="outlined">
-      {label}
-    </Button>
+    <Tooltip title="Highlight Component">
+      <IconButton onClick={highlightComponents}>
+        <VisibilityOutlinedIcon />
+      </IconButton>
+    </Tooltip>
   );
 }
