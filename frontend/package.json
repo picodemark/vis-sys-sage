@@ -8,7 +8,6 @@
     "@fontsource/roboto": "^4.5.7",
     "@mui/icons-material": "^5.8.2",
     "@mui/material": "^5.8.3",
-    "@mui/x-data-grid": "^5.17.0",
     "@reduxjs/toolkit": "^1.8.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -29,16 +28,15 @@
     "react-draggable": "^4.4.5",
     "react-redux": "^8.0.2",
     "react-scripts": "5.0.1",
-    "reselect": "^4.1.6",
-    "web-vitals": "^2.1.4"
+    "reselect": "^4.1.6"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
+    "lint": "eslint src tests",
+    "lint:fix": "eslint src tests --fix",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "eslintConfig": {
