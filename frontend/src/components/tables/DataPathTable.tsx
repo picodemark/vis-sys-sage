@@ -2,50 +2,52 @@ import React from 'react';
 import MUIDataTable from 'mui-datatables';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useAppSelector } from '../../hooks/hooks';
-import { selectDataPathLinkAttributes } from '../../store/graphDataSlice';
+import { StyledTableCell } from './util/common';
+
+const COLUMN_NAMES = {
+  dp_type: 'Type',
+  latency: 'Latency',
+  bw: 'Bandwidth'
+};
 
 interface Props {
-  source: string;
-  target: string;
+  linkInfo: any;
 }
 
 export default function DataPathTable(props: Props) {
-  const { source, target } = props;
+  const { linkInfo } = props;
 
-  let rowData = [];
+  let data = [];
 
   let columns = [];
 
-  const linkAttributes = useAppSelector((state) => selectDataPathLinkAttributes(state));
+  if (linkInfo !== undefined) {
+    if (linkInfo?.attributeNames !== undefined && linkInfo?.attributes !== undefined) {
+      // create columns dynamically
+      columns = linkInfo.attributeNames.map((col: string) => ({
+        name: col,
+        label: col in COLUMN_NAMES ? COLUMN_NAMES[col] : col
+      }));
 
-  if (source in linkAttributes && target in linkAttributes[source]) {
-    const data = linkAttributes[source][target];
-
-    // create columns dynamically
-    columns = data?.attributeNames.map((col) => ({
-      name: col
-    }));
-
-    rowData = data?.attributes;
+      data = linkInfo.attributes;
+    }
   }
 
   const options = {
+    elevation: 0,
     empty: true,
     download: false,
     print: false,
     filter: false,
     selectableRowsHideCheckboxes: true,
-    responsive: 'scrollMaxHeight',
     rowsPerPage: 10,
+    expandableRowsHeader: false,
     expandableRows: true,
     draggableColumns: { enabled: true },
-    elevation: 0,
-    renderExpandableRow: (rowData) => {
+    renderExpandableRow: (row) => {
       return (
         <React.Fragment>
           <tr>
@@ -54,15 +56,19 @@ export default function DataPathTable(props: Props) {
                 <Table style={{ width: '100%' }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Value</TableCell>
+                      <StyledTableCell>Name</StyledTableCell>
+                      <StyledTableCell>Value</StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rowData.map((value, index) => (
+                    {row.map((value, index) => (
                       <TableRow key={index}>
-                        <TableCell>{columns[index].name}</TableCell>
-                        <TableCell>{value}</TableCell>
+                        <StyledTableCell>
+                          {columns[index].name in COLUMN_NAMES
+                            ? COLUMN_NAMES[columns[index].name]
+                            : columns[index].name}
+                        </StyledTableCell>
+                        <StyledTableCell>{value}</StyledTableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -75,7 +81,5 @@ export default function DataPathTable(props: Props) {
     }
   };
 
-  return (
-    <MUIDataTable title={'ACME Employee list'} data={rowData} columns={columns} options={options} />
-  );
+  return <MUIDataTable data={data} columns={columns} options={options} />;
 }
