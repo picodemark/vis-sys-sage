@@ -5,9 +5,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import ComponentsTable from '../tables/ComponentsTable';
-import GridViewIcon from '@mui/icons-material/GridView';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { useAppSelector } from '../../hooks/hooks';
 import DraggablePaperComponent from '../DraggablePaperComponent';
+import Box from '@mui/material/Box';
 
 export default function ComponentsButton() {
   const componentsListSelector = useAppSelector((state) => selectComponentsList(state));
@@ -24,7 +25,7 @@ export default function ComponentsButton() {
 
   return (
     <React.Fragment>
-      <Button onClick={openDialog} variant="outlined" startIcon={<GridViewIcon />}>
+      <Button onClick={openDialog} variant="outlined" startIcon={<GridViewOutlinedIcon />}>
         Components
       </Button>
       <Dialog
@@ -35,7 +36,9 @@ export default function ComponentsButton() {
         maxWidth="xl">
         <DialogTitle style={{ cursor: 'move' }}>All Components</DialogTitle>
         <DialogContent sx={{ padding: 0 }}>
-          <ComponentsTable rowData={componentsListSelector} />
+          <Box width={1000} maxHeight={600}>
+            <ComponentsTable data={componentsListSelector} />
+          </Box>
         </DialogContent>
       </Dialog>
     </React.Fragment>
