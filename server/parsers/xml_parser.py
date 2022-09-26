@@ -26,24 +26,30 @@ class XMLParser:
         self.nodes_list = []
 
     def get_data(self):
-        data = {
+        return {
             "tree": self.__get_component_tree(),
             "componentsList": self.components_list,
+            "componentsInfo": self.components_dict,
             "nodesList": self.nodes_list,
             "dataPath": self.__get_data_path_graph()
         }
-        return data
 
     def __get_dict_from_xml(self):
         start_time_xml_to_dict = datetime.now()
         converted_dict = xmltodict.parse(self.xml)
         logger.info(
-            "dt[xml_to_dict]: %s",
+            "dt[__get_dict_from_xml]: %s",
             (datetime.now() - start_time_xml_to_dict).total_seconds()
         )
         return converted_dict
 
     def __assign_component_info(self, component_dict, node_id):
+        """Assigns the component information to the components list and dict containing all components.
+
+        :param component_dict: dictionary containing information for a component
+        :param node_id: node ID of a component
+        :return: 
+        """
         component_dict_obj = {
             "name": component_dict["name"],
             "nodeID": node_id,
@@ -52,7 +58,9 @@ class XMLParser:
         }
         if "attributes" in component_dict:
             component_dict_obj["attributes"] = component_dict["attributes"]
+            component_dict_obj["attributesNumber"] = component_dict["attributesNumber"]
 
+        # adjust components dict and list
         self.components_dict[component_dict["uniqueComponentID"]] = component_dict_obj
         self.components_list.append(component_dict_obj)
 
@@ -93,17 +101,26 @@ class XMLParser:
             # set attributes and node info
             elif key_lower[0] == "@":
                 if "attributes" not in component_dict:
-                    component_dict["attributes"] = {}
-                component_dict["attributes"][key[1:]] = value
+                    component_dict["attributes"] = []
+                component_dict["attributes"].append({
+                    "name": key[1:],
+                    "value": value
+                })
             # set further attributes
             elif key_lower == "attribute":
                 if "attributes" not in component_dict:
-                    component_dict["attributes"] = {}
+                    component_dict["attributes"] = []
                 if isinstance(component_dict[key], list):
                     for attribute_obj in component_dict[key]:
-                        component_dict["attributes"][attribute_obj["@name"]] = attribute_obj["@value"]
+                        component_dict["attributes"].append({
+                            "name": attribute_obj["@name"],
+                            "value": attribute_obj["@value"]
+                        })
                 else:
-                    component_dict["attributes"][component_dict[key]["@name"]] = component_dict[key]["@value"]
+                    component_dict["attributes"].append({
+                        "name": component_dict[key]["@name"],
+                        "value": component_dict[key]["@value"]
+                    })
             # set children
             elif isinstance(value, dict):
                 if "children" in component_dict:
@@ -118,6 +135,11 @@ class XMLParser:
 
             # delete key
             del component_dict[key]
+
+        # determine number of attributes
+        component_dict["attributesNumber"] = len(
+            component_dict["attributes"]
+        ) if "attributes" in component_dict else 0
 
         # fill components dict and list
         self.__assign_component_info(component_dict, node_id)
@@ -183,40 +205,48 @@ class XMLParser:
                 link_attributes[source] = {}
 
             if target not in link_attributes[source]:
-                link_attributes[source][target] = []
+                link_attributes[source][target] = {
+                    "attributes": [],
+                    "attributeNames": []
+                }
 
             attributes = {}
+            attribute_names = []
+
             for key, value in data_path.items():
                 key_lower = key.lower()
 
                 if key_lower[0] == "@":
+                    attribute_names.append(key[1:])
                     if key_lower[1:] == "dp_type":
-                        attributes["type"] = DATA_PATH_TYPES[value] if value in DATA_PATH_TYPES else "CUSTOM"
-                    elif key_lower[1:] == "latency" or key_lower[1:] == "bw":
-                        attributes[key[1:]] = value
+                        attributes[key[1:]] = DATA_PATH_TYPES[value] if value in DATA_PATH_TYPES else "CUSTOM"
                     else:
-                        if "moreInfo" not in attributes:
-                            attributes["moreInfo"] = []
-                        attributes["moreInfo"].append({
-                            "name": key[1:],
-                            "value": value
-                        })
+                        attributes[key[1:]] = value
                 elif key_lower == "attribute":
                     if isinstance(data_path[key], list):
                         for attribute_obj in data_path[key]:
+                            attribute_names.append(attribute_obj["@name"])
                             attributes[attribute_obj["@name"]] = attribute_obj["@value"]
                     else:
+                        attribute_names.append(data_path[key]["@name"])
                         attributes[data_path[key]["@name"]] = data_path[key]["@value"]
 
-            link_attributes[source][target].append(attributes)
+            # add attributes and attribute names per link
+            link_attributes[source][target]["attributes"].append(attributes)
+            link_attributes[source][target]["attributeNames"] += attribute_names
 
-        # adjust
+            # make list unique
+            link_attributes[source][target]["attributeNames"] = list(
+                set(link_attributes[source][target]["attributeNames"])
+            )
+
         for node in components_per_node.keys():
             components_per_node[node] = [{
                 "id": component,
                 "info": self.__get_component_info(component)
             } for component in components_per_node[node].keys()]
 
+        # logging
         logger.info(
             "dt[xml_to_dict]: %s",
             (datetime.now() - start_time_get_data_path).total_seconds()
