@@ -2,39 +2,31 @@ import React from 'react';
 import MUIDataTable from 'mui-datatables';
 
 interface Props {
-  rowData: any;
+  data: any;
 }
 
 export default function AttributesTable(props: Props) {
-  const { rowData } = props;
+  const { data } = props;
 
   const columns = [
     {
       name: 'name',
-      label: 'Name',
-      width: '30%'
+      label: 'Name'
     },
     {
       name: 'value',
-      label: 'Value',
-      width: '70%'
+      label: 'Value'
     }
   ];
 
-  const createRowData = (data: Record<string, string | number | boolean>) => {
-    return Object.keys(data).map((key) => ({ name: key, value: data[key] }));
-  };
-
   const options = {
-    empty: true,
+    elevation: 0,
     download: false,
     print: false,
     filter: false,
     selectableRowsHideCheckboxes: true,
-    responsive: 'scrollMaxHeight',
-    rowsPerPage: 5,
-    elevation: 0
+    rowsPerPage: 5
   };
 
-  return <MUIDataTable data={createRowData(rowData)} columns={columns} options={options} />;
+  return <MUIDataTable data={data} columns={columns} options={options} />;
 }
