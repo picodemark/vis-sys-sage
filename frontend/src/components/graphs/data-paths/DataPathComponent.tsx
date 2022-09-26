@@ -1,29 +1,35 @@
 import React, { useState } from 'react';
 import ComponentAvatar from '../ComponentAvatar';
-import { selectClickedComponents, setClickedComponents } from '../../../store/graphDataSlice';
+import {
+  selectHighlightedComponents,
+  setHighlightedComponents
+} from '../../../store/graphDataSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 import { Attributes } from '../../../types/types';
+import SelfDataPathButton from '../../buttons/SelfDataPathButton';
 
 interface Props {
   id: string;
   info: Record<string, string | Attributes>;
+  linkInfo: any;
 }
 
 function DataPathComponent(props: Props) {
-  const { id, info } = props;
+  const { id, info, linkInfo } = props;
+
+  const dispatch = useAppDispatch();
 
   const clickedComponentSelector = useAppSelector(
-    (state) => selectClickedComponents(state).indexOf(id) > -1
+    (state) => selectHighlightedComponents(state).indexOf(id) > -1
   );
-  const dispatch = useAppDispatch();
 
   const [highlight, setHighlight] = useState<boolean>(false);
 
   const triggerHighlight = () => {
-    dispatch(setClickedComponents([id]));
+    dispatch(setHighlightedComponents([id]));
   };
 
-  // highlight only when component ID is the same
+  // highlight only when component ID is selected to be highlighted
   if (!highlight && clickedComponentSelector) {
     setHighlight(true);
   }
@@ -36,35 +42,41 @@ function DataPathComponent(props: Props) {
   return (
     <div
       style={{
+        display: 'flex',
+        flexDirection: 'column',
         width: '110px',
         borderRadius: '5px',
         backgroundColor: highlight ? 'yellow' : '#dad7cd',
         fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-        display: 'flex',
         cursor: 'pointer'
       }}
       onClick={triggerHighlight}>
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0.5rem',
-          fontSize: '30px'
+          display: 'flex'
         }}>
-        <ComponentAvatar label={info.name as string} attributes={info.attributes as Attributes} />
+        <div
+          style={{
+            alignItems: 'center',
+            padding: '0.5rem',
+            fontSize: '30px'
+          }}>
+          <ComponentAvatar label={info.name as string} attributes={info.attributes as Attributes} />
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '0.5rem 0.5rem 0.5rem 0',
+            textAlign: 'center'
+          }}>
+          <span style={{ fontSize: '30px', fontWeight: 800, color: '#0065bd' }}>
+            {info.nodeID as string}
+          </span>
+          <span style={{ fontSize: '24px', marginTop: 'auto' }}>{info.componentID as string}</span>
+        </div>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '0.5rem 0.5rem 0.5rem 0',
-          textAlign: 'center'
-        }}>
-        <span style={{ fontSize: '30px', fontWeight: 800, color: '#0065bd' }}>
-          {info.nodeID as string}
-        </span>
-        <span style={{ fontSize: '24px', marginTop: 'auto' }}>{info.componentID as string}</span>
-      </div>
+      {linkInfo.length !== 0 && <SelfDataPathButton sourceInfo={info} linkInfo={linkInfo} />}
     </div>
   );
 }
