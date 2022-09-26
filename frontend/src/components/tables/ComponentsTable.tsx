@@ -21,19 +21,19 @@ export default function ComponentsTable(props: Props) {
       name: 'name',
       label: 'Avatar',
       options: {
-        customBodyRender: (value, tableMeta) =>
-          value === 'cache' ? (
+        customBodyRenderLite: (dataIndex) =>
+          data[dataIndex].name === 'cache' ? (
             <ComponentAvatar
-              label={value}
+              label={data[dataIndex].nam}
               size="small"
               cacheLevel={
-                tableMeta.tableData[tableMeta.rowIndex].attributes.filter(
+                data[dataIndex].attributes.filter(
                   (attribute) => attribute.name === 'cache_level'
                 )[0].value
               }
             />
           ) : (
-            <ComponentAvatar label={value} size="small" />
+            <ComponentAvatar label={data[dataIndex].name} size="small" />
           ),
         filter: false,
         sort: false
@@ -57,11 +57,9 @@ export default function ComponentsTable(props: Props) {
     },
     {
       name: 'uniqueComponentID',
-      label: 'More',
+      label: 'Highlight',
       options: {
-        customBodyRender: (value) => (
-          <HighlightComponentsButton label="Show" components={[value]} />
-        ),
+        customBodyRender: (value) => <HighlightComponentsButton components={[value]} />,
         filter: false,
         sort: false
       }
