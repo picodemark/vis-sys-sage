@@ -33,8 +33,6 @@ interface Props {
 export default function ComponentAvatar(props: Props) {
   const { label, cacheLevel, attributes, size } = props;
 
-  const [avatarSize, setAvatarSize] = useState<string>('medium');
-
   const [open, setOpen] = React.useState<boolean>(false);
 
   const clickable = attributes !== undefined ? Object.keys(attributes).length > 1 : false;
@@ -84,25 +82,21 @@ export default function ComponentAvatar(props: Props) {
       break;
   }
 
-  if (size !== undefined) {
-    setAvatarSize(size);
-  }
-
   return (
     <React.Fragment>
       <div
         onClick={openDialog}
         style={{
-          width: AVATAR_SIZES[avatarSize].dim,
-          height: AVATAR_SIZES[avatarSize].dim,
-          lineHeight: AVATAR_SIZES[avatarSize].dim,
+          width: AVATAR_SIZES[size ?? 'medium'].dim,
+          height: AVATAR_SIZES[size ?? 'medium'].dim,
+          lineHeight: AVATAR_SIZES[size ?? 'medium'].dim,
           flexShrink: 0,
           borderRadius: '50%',
           color: '#ffffff',
           backgroundColor: avatarConfig.color,
           textAlign: 'center' as const,
           fontFamily: 'Roboto, Helvetica, Arial, sans-serif',
-          fontSize: AVATAR_SIZES[avatarSize].fontSize,
+          fontSize: AVATAR_SIZES[size ?? 'medium'].fontSize,
           cursor: clickable ? 'pointer' : 'default'
         }}>
         {avatarConfig.label}
@@ -116,7 +110,7 @@ export default function ComponentAvatar(props: Props) {
         <DialogContent sx={{ padding: 0 }}>
           {attributes !== undefined && (
             <Box minWidth={600}>
-              <AttributesTable rowData={attributes} />
+              <AttributesTable data={attributes} />
             </Box>
           )}
         </DialogContent>
