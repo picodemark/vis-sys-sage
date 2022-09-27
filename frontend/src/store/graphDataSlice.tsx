@@ -4,7 +4,7 @@ import { RawNodeDatum } from 'react-d3-tree/lib/types/common';
 import { ComponentListItem, CustomRawNodeDatum, NodeListItem } from '../types/types';
 
 interface Props {
-  nodeID: string;
+  nodeIDs: string[];
   tree: RawNodeDatum;
   componentsList: ComponentListItem[];
   componentsInfo: Record<string, ComponentListItem>;
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const initialState: Props = {
-  nodeID: 'all',
+  nodeIDs: [],
   tree: {
     name: ''
   },
@@ -39,19 +39,19 @@ export const graphDataSlice = createSlice({
       state.tree = action.payload?.tree;
       state.componentsList = action.payload?.componentsList;
       state.componentsInfo = action.payload?.componentsInfo;
-      state.nodesList = action.payload?.nodesList;
+      state.nodesList = [{ id: 'all' }].concat(action.payload?.nodesList);
       state.dataPath.nodes = action.payload?.dataPath?.nodes;
       state.dataPath.links = action.payload?.dataPath?.links;
       state.dataPathLinkAttributes = action.payload?.dataPath?.attributes;
 
       // show all nodes as default
-      state.nodeID = 'all';
+      state.nodeIDs = ['all'].concat(action.payload?.nodesList.map((node) => node.id));
 
       // no components highlighted as default
       state.highlightedComponents = [];
     },
-    setNodeID: (state, action: PayloadAction<string>) => {
-      state.nodeID = action.payload;
+    setNodeIDs: (state, action: PayloadAction<string[]>) => {
+      state.nodeIDs = action.payload;
     },
     setHighlightedComponents: (state, action: PayloadAction<string[]>) => {
       state.highlightedComponents = action.payload;
@@ -59,20 +59,21 @@ export const graphDataSlice = createSlice({
   }
 });
 
-export const { setGraphData, setNodeID, setHighlightedComponents } = graphDataSlice.actions;
+export const { setGraphData, setNodeIDs, setHighlightedComponents } =
+  graphDataSlice.actions;
 
 export default graphDataSlice.reducer;
 
-export const selectNodeID = (state) => state.graphData.nodeID;
-
-export const selectCurrentTree = createSelector(
-  selectNodeID,
+export const selectFilteredTree = createSelector(
+  (state) => state.graphData.nodeIDs,
   (state) => state.graphData.tree,
-  (nodeID: string, tree: CustomRawNodeDatum) => {
-    if (nodeID === 'all') {
-      return tree;
+  (ids: string[], tree: CustomRawNodeDatum) => {
+    if (ids.indexOf('all') === -1 && tree?.children !== undefined) {
+      const filteredTree = Object.assign({}, tree);
+      filteredTree.children = tree.children.filter((node) => ids.indexOf(node.id) > -1);
+      return filteredTree;
     }
-    return tree.children.filter((node) => node.id === nodeID)[0];
+    return tree;
   }
 );
 
@@ -83,28 +84,26 @@ export const selectComponentsInfo = (state) => state.graphData.componentsInfo;
 export const selectNodeList = (state) => state.graphData.nodesList;
 
 export const selectFilteredDataPath = createSelector(
-  selectNodeID,
+  (state) => state.graphData.nodeIDs,
   (state) => state.graphData.dataPath,
-  (nodeID, dataPath) => {
-    const dataPathNew = {};
+  (ids, dataPath) => {
+    const filteredDataPath = {};
 
-    if (nodeID === 'all') {
-      // merge all components per node into single list
-      dataPathNew['nodes'] = Object.values(dataPath.nodes).reduce(
-        (prev: any, current: any) => prev.concat(current),
-        []
-      );
-      // merge all links per node into single list
-      dataPathNew['links'] = Object.values(dataPath.links).reduce(
-        (prev: any, current: any) => prev.concat(current),
-        []
-      );
-    } else {
-      dataPathNew['nodes'] = dataPath.nodes[nodeID];
-      dataPathNew['links'] = dataPath.links[nodeID];
-    }
+    // merge all components per node into a single list
+    filteredDataPath['nodes'] = Object.entries(dataPath.nodes).reduce(
+      (newEntry, entry) =>
+        ids.indexOf(entry[0]) > -1 ? newEntry.concat(entry[1]) : newEntry.concat([]),
+      []
+    );
 
-    return dataPathNew;
+    // merge all links per node into a single list
+    filteredDataPath['links'] = Object.entries(dataPath.links).reduce(
+      (newEntry, entry) =>
+        ids.indexOf(entry[0]) > -1 ? newEntry.concat(entry[1]) : newEntry.concat([]),
+      []
+    );
+
+    return filteredDataPath;
   }
 );
 

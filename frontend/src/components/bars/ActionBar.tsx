@@ -3,8 +3,8 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import UploadButton from '../buttons/UploadButton';
-import NodeList from '../select/NodeList';
 import ComponentsButton from '../buttons/ComponentsButton';
+import NodeList from '../select/NodeList';
 
 export default function ActionBar() {
   return (
