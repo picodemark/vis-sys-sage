@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Tree from 'react-d3-tree';
 import { Toolbar } from '@mui/material';
 import TreeComponent from './TreeComponent';
-import { selectCurrentTree } from '../../../store/graphDataSlice';
+import { selectFilteredTree } from '../../../store/graphDataSlice';
 import Box from '@mui/material/Box';
 import '../../../style/component-graph.css';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -16,7 +16,7 @@ import { Point } from 'react-d3-tree/lib/types/common';
 const MAX_DEPTH = Number.MAX_SAFE_INTEGER as number;
 
 export default function TreeGraph() {
-  const treeSelector = useAppSelector((state) => selectCurrentTree(state));
+  const treeSelector = useAppSelector((state) => selectFilteredTree(state));
 
   const [keyCount, setKeyCount] = useState<number>(0);
 
