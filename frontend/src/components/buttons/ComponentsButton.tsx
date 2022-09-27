@@ -25,7 +25,11 @@ export default function ComponentsButton() {
 
   return (
     <React.Fragment>
-      <Button onClick={openDialog} variant="outlined" startIcon={<GridViewOutlinedIcon />}>
+      <Button
+        onClick={openDialog}
+        variant="outlined"
+        startIcon={<GridViewOutlinedIcon />}
+        sx={{ paddingRight: '1rem' }}>
         Components
       </Button>
       <Dialog
