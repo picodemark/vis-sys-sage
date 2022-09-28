@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import { selectComponentsList } from '../../store/graphDataSlice';
+import { selectComponentList } from '../../store/graphDataSlice';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,7 +11,7 @@ import DraggablePaperComponent from '../DraggablePaperComponent';
 import Box from '@mui/material/Box';
 
 export default function ComponentsButton() {
-  const componentsListSelector = useAppSelector((state) => selectComponentsList(state));
+  const componentListSelector = useAppSelector((state) => selectComponentList(state));
 
   const [open, setOpen] = React.useState<boolean>(false);
 
@@ -41,7 +41,7 @@ export default function ComponentsButton() {
         <DialogTitle style={{ cursor: 'move' }}>All Components</DialogTitle>
         <DialogContent sx={{ padding: 0 }}>
           <Box width={1000} maxHeight={600}>
-            <ComponentsTable data={componentsListSelector} />
+            <ComponentsTable data={componentListSelector} />
           </Box>
         </DialogContent>
       </Dialog>
