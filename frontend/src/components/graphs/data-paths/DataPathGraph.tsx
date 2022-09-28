@@ -16,6 +16,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DataPathTable from '../../tables/DataPathTable';
 import DataPathText from './DataPathText';
 import DraggablePaperComponent from '../../DraggablePaperComponent';
+import { Toolbar } from '@mui/material';
+import DataPathTypeList from '../../select/DataPathTypeList';
+import Button from '@mui/material/Button';
+import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
 
 export default function DataPathGraph() {
   const filteredGraphDataSelector = useAppSelector((state) => selectFilteredDataPath(state));
@@ -118,6 +122,16 @@ export default function DataPathGraph() {
 
   return (
     <React.Fragment>
+      <Toolbar>
+        <DataPathTypeList />
+        <Button
+          size="small"
+          variant="outlined"
+          onClick={forceReMount}
+          startIcon={<CenterFocusWeakIcon />}>
+          Center
+        </Button>
+      </Toolbar>
       <Box sx={{ width: '100%', cursor: 'grab' }} ref={box}>
         <Graph
           key={keyCount} // force data-path graph to re-mount
