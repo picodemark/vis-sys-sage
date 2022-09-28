@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -51,6 +51,13 @@ export default function ComponentAvatar(props: Props) {
     label: 'UN ',
     color: 'darkgrey'
   };
+
+  const showCacheLevel =
+    cacheLevel ??
+    (label === 'cache' && attributes !== undefined
+      ? attributes?.filter((attribute) => attribute?.name === 'cache_level')[0].value
+      : '');
+
   switch (label) {
     case 'topology':
       avatarConfig.label = 'TR';
@@ -65,7 +72,7 @@ export default function ComponentAvatar(props: Props) {
       avatarConfig.color = 'blue';
       break;
     case 'cache':
-      avatarConfig.label = `L${cacheLevel ?? ''}`;
+      avatarConfig.label = `L${showCacheLevel}`;
       avatarConfig.color = 'brown';
       break;
     case 'Numa':
