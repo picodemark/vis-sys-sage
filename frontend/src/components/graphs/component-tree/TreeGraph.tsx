@@ -29,7 +29,7 @@ export default function TreeGraph() {
 
   const box = useRef<HTMLDivElement>();
 
-  const reMountGraph = () => {
+  const forceReMount = () => {
     setKeyCount(keyCount + 1);
   };
 
@@ -39,7 +39,7 @@ export default function TreeGraph() {
 
   const handleInitialDepthSwitch = (event) => {
     event.target.checked ? setInitialDepth(MAX_DEPTH) : setInitialDepth(1);
-    reMountGraph();
+    forceReMount();
   };
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function TreeGraph() {
 
   return (
     <React.Fragment>
-      <Toolbar variant="dense">
+      <Toolbar>
         <FormControlLabel
           control={<Switch color="primary" onChange={handleInitialDepthSwitch} />}
           label="Show All"
@@ -58,7 +58,7 @@ export default function TreeGraph() {
         <Button
           size="small"
           variant="outlined"
-          onClick={centerGraph}
+          onClick={forceReMount}
           startIcon={<CenterFocusWeakIcon />}>
           Center
         </Button>
