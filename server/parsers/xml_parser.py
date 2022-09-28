@@ -17,20 +17,26 @@ DATA_PATH_TYPES = {
 }
 
 
+def get_data_path_type(data_path_type):
+    return DATA_PATH_TYPES[
+        data_path_type
+    ] if data_path_type in DATA_PATH_TYPES else f"CUSTOM({data_path_type})"
+
+
 class XMLParser:
     def __init__(self, xml_string):
         self.xml = xml_string
         self.converted_dict = self.__get_dict_from_xml()
         self.components_dict = {}
-        self.components_list = []
-        self.nodes_list = []
+        self.component_list = []
+        self.node_list = []
 
     def get_data(self):
         return {
             "tree": self.__get_component_tree(),
-            "componentsList": self.components_list,
+            "componentList": self.component_list,
             "componentsInfo": self.components_dict,
-            "nodesList": self.nodes_list,
+            "nodeList": self.node_list,
             "dataPath": self.__get_data_path_graph()
         }
 
@@ -48,7 +54,7 @@ class XMLParser:
 
         :param component_dict: dictionary containing information for a component
         :param node_id: node ID of a component
-        :return: 
+        :return:
         """
         component_dict_obj = {
             "name": component_dict["name"],
@@ -62,7 +68,7 @@ class XMLParser:
 
         # adjust components dict and list
         self.components_dict[component_dict["uniqueComponentID"]] = component_dict_obj
-        self.components_list.append(component_dict_obj)
+        self.component_list.append(component_dict_obj)
 
     def __get_component_info(self, unique_component_id):
         if unique_component_id in self.components_dict:
@@ -151,7 +157,7 @@ class XMLParser:
                 if component_dict["name"] == "topology":
                     # the children of topology component are nodes
                     node_id = child["@id"]
-                    self.nodes_list.append({
+                    self.node_list.append({
                         "id": child["@id"]
                     })
                 self.__get_component_tree_rec(child, node_id)
@@ -159,46 +165,65 @@ class XMLParser:
     def __get_data_path_graph(self):
         sys_sage_dict = copy.deepcopy(self.converted_dict)
 
+        # get data-paths data from sys-sage dictionary
         data_paths = sys_sage_dict["sys-sage"]["data-paths"]["datapath"]
 
+        # start time measuring for performance tracking
         start_time_get_data_path = datetime.now()
 
+        # all data-path types
+        data_path_types = []
+
+        # all components for each node
         components_per_node = {}
 
+        # all links for each node
         links_per_node = {}
 
+        # attributes for each link
         link_attributes = {}
 
+        # iterate over all given data-paths
         for data_path in data_paths:
+            # determine the data-path type
+            raw_data_path_type = data_path["@dp_type"]
+            data_path_type = get_data_path_type(raw_data_path_type)
+            data_path_types.append(data_path_type)
+
+            # treat source and target component
             source = data_path["@source"]
+            target = data_path["@target"]
+
             node_id_source = self.components_dict[source]["nodeID"]
+            node_id_target = self.components_dict[target]["nodeID"]
 
             if node_id_source not in components_per_node:
                 components_per_node[node_id_source] = {}
-
-            if source not in components_per_node[node_id_source]:
-                components_per_node[node_id_source][source] = True
-
-            del data_path["@source"]
-
-            target = data_path["@target"]
-            node_id_target = self.components_dict[target]["nodeID"]
-
             if node_id_target not in components_per_node:
                 components_per_node[node_id_target] = {}
 
-            if target not in components_per_node[node_id_target]:
-                components_per_node[node_id_target][target] = True
+            if data_path_type not in components_per_node[node_id_source]:
+                components_per_node[node_id_source][data_path_type] = []
+            if data_path_type not in components_per_node[node_id_target]:
+                components_per_node[node_id_target][data_path_type] = []
 
+            components_per_node[node_id_source][data_path_type].append(source)
+            components_per_node[node_id_target][data_path_type].append(target)
+
+            del data_path["@source"]
             del data_path["@target"]
 
+            # add link between source and target component for each node
             if node_id_source not in links_per_node:
-                links_per_node[node_id_source] = []
+                links_per_node[node_id_source] = {}
+                links_per_node[node_id_source][data_path_type] = []
 
-            if source not in link_attributes or target not in link_attributes[source]:
-                links_per_node[node_id_source].append({
+            if source not in link_attributes or \
+                    target not in link_attributes[source] or \
+                    data_path_type not in links_per_node[node_id_source]:
+                links_per_node[node_id_source][data_path_type].append({
                     "source": source,
-                    "target": target
+                    "target": target,
                 })
 
             if source not in link_attributes:
@@ -207,7 +232,7 @@ class XMLParser:
             if target not in link_attributes[source]:
                 link_attributes[source][target] = {
                     "attributes": [],
-                    "attributeNames": []
+                    "attributeNames": [],
                 }
 
             attributes = {}
@@ -231,7 +256,7 @@ class XMLParser:
                         attribute_names.append(data_path[key]["@name"])
                         attributes[data_path[key]["@name"]] = data_path[key]["@value"]
 
-            # add attributes and attribute names per link
+            # add attributes and attribute names for each link
             link_attributes[source][target]["attributes"].append(attributes)
             link_attributes[source][target]["attributeNames"] += attribute_names
 
@@ -240,20 +265,25 @@ class XMLParser:
                 set(link_attributes[source][target]["attributeNames"])
             )
 
+        # make all components for each node unique
         for node in components_per_node.keys():
-            components_per_node[node] = [{
-                "id": component,
-                "info": self.__get_component_info(component)
-            } for component in components_per_node[node].keys()]
+            for dp_type in components_per_node[node].keys():
+                components_per_node[node][dp_type] = list(set(components_per_node[node][dp_type]))
+                components_per_node[node][dp_type] = [{"id": node} for node in components_per_node[node][dp_type]]
 
-        # logging
+        # make all data-path types unique
+        data_path_types = list(set(data_path_types))
+        data_path_types = [{"name": dp_type} for dp_type in data_path_types]
+
+        # logging the measured time for performance tracking
         logger.info(
-            "dt[xml_to_dict]: %s",
+            "dt[__get_data_path_graph]: %s",
             (datetime.now() - start_time_get_data_path).total_seconds()
         )
 
         return {
+            "types": data_path_types,
             "nodes": components_per_node,
             "links": links_per_node,
-            "attributes": link_attributes
+            "attributes": link_attributes,
         }

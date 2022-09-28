@@ -2,13 +2,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { RawNodeDatum } from 'react-d3-tree/lib/types/common';
 import { ComponentListItem, CustomRawNodeDatum, NodeListItem } from '../types/types';
+import { tablePaginationClasses } from '@mui/material';
 
 interface Props {
   nodeIDs: string[];
   tree: RawNodeDatum;
-  componentsList: ComponentListItem[];
+  componentList: ComponentListItem[];
   componentsInfo: Record<string, ComponentListItem>;
-  nodesList: NodeListItem[];
+  nodeList: NodeListItem[];
+  filteredTypes: string[];
+  dataPathTypes: any;
   dataPath: any;
   dataPathLinkAttributes: any;
   highlightedComponents: string[];
@@ -19,9 +22,11 @@ const initialState: Props = {
   tree: {
     name: ''
   },
-  componentsList: [],
+  componentList: [],
   componentsInfo: {},
-  nodesList: [],
+  nodeList: [],
+  filteredTypes: [],
+  dataPathTypes: [],
   dataPath: {
     nodes: [],
     links: []
@@ -37,15 +42,19 @@ export const graphDataSlice = createSlice({
     setGraphData: (state, action: PayloadAction<any>) => {
       // set state based on payload
       state.tree = action.payload?.tree;
-      state.componentsList = action.payload?.componentsList;
+      state.componentList = action.payload?.componentList;
       state.componentsInfo = action.payload?.componentsInfo;
-      state.nodesList = [{ id: 'all' }].concat(action.payload?.nodesList);
+      state.nodeList = [{ id: 'all' }].concat(action.payload?.nodeList);
+      state.dataPathTypes = [{ name: 'all' }].concat(action.payload?.dataPath?.types);
       state.dataPath.nodes = action.payload?.dataPath?.nodes;
       state.dataPath.links = action.payload?.dataPath?.links;
       state.dataPathLinkAttributes = action.payload?.dataPath?.attributes;
 
       // show all nodes as default
-      state.nodeIDs = ['all'].concat(action.payload?.nodesList.map((node) => node.id));
+      state.nodeIDs = ['all'].concat(action.payload?.nodeList.map((node) => node.id));
+
+      // show all data-path types as default
+      state.filteredTypes = ['all'].concat(action.payload?.dataPath.types.map((type) => type.name));
 
       // no components highlighted as default
       state.highlightedComponents = [];
@@ -53,13 +62,16 @@ export const graphDataSlice = createSlice({
     setNodeIDs: (state, action: PayloadAction<string[]>) => {
       state.nodeIDs = action.payload;
     },
+    setFilteredTypes: (state, action: PayloadAction<string[]>) => {
+      state.filteredTypes = action.payload;
+    },
     setHighlightedComponents: (state, action: PayloadAction<string[]>) => {
       state.highlightedComponents = action.payload;
     }
   }
 });
 
-export const { setGraphData, setNodeIDs, setHighlightedComponents } =
+export const { setGraphData, setNodeIDs, setFilteredTypes, setHighlightedComponents } =
   graphDataSlice.actions;
 
 export default graphDataSlice.reducer;
@@ -77,31 +89,51 @@ export const selectFilteredTree = createSelector(
   }
 );
 
-export const selectComponentsList = (state) => state.graphData.componentsList;
+export const selectComponentList = (state) => state.graphData.componentList;
 
 export const selectComponentsInfo = (state) => state.graphData.componentsInfo;
 
-export const selectNodeList = (state) => state.graphData.nodesList;
+export const selectNodeList = (state) => state.graphData.nodeList;
+
+export const selectDataPathTypes = (state) => state.graphData.dataPathTypes;
 
 export const selectFilteredDataPath = createSelector(
   (state) => state.graphData.nodeIDs,
+  (state) => state.graphData.filteredTypes,
   (state) => state.graphData.dataPath,
-  (ids, dataPath) => {
-    const filteredDataPath = {};
+  (ids, types, dataPath) => {
+    const filteredDataPath = {
+      nodes: [],
+      links: []
+    };
 
     // merge all components per node into a single list
-    filteredDataPath['nodes'] = Object.entries(dataPath.nodes).reduce(
-      (newEntry, entry) =>
-        ids.indexOf(entry[0]) > -1 ? newEntry.concat(entry[1]) : newEntry.concat([]),
-      []
-    );
+    filteredDataPath.nodes = Object.keys(dataPath.nodes).reduce((accNodes: any, id) => {
+      if (ids.indexOf(id) > -1) {
+        const nodeTypes = Object.keys(dataPath.nodes[id]).reduce((accTypes, type) => {
+          if (types.indexOf(type) > -1) {
+            return accTypes.concat(dataPath.nodes[id][type]);
+          }
+          return accTypes;
+        }, []);
+        return accNodes.concat(nodeTypes);
+      }
+      return accNodes;
+    }, []);
 
     // merge all links per node into a single list
-    filteredDataPath['links'] = Object.entries(dataPath.links).reduce(
-      (newEntry, entry) =>
-        ids.indexOf(entry[0]) > -1 ? newEntry.concat(entry[1]) : newEntry.concat([]),
-      []
-    );
+    filteredDataPath.links = Object.keys(dataPath.links).reduce((accLinks: any, id) => {
+      if (ids.indexOf(id) > -1) {
+        const nodeTypes = Object.keys(dataPath.links[id]).reduce((accTypes, type) => {
+          if (types.indexOf(type) > -1) {
+            return accTypes.concat(dataPath.links[id][type]);
+          }
+          return accTypes;
+        }, []);
+        return accLinks.concat(nodeTypes);
+      }
+      return accLinks;
+    }, []);
 
     return filteredDataPath;
   }
