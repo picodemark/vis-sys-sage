@@ -24,7 +24,7 @@ export default function ComponentsTable(props: Props) {
         customBodyRenderLite: (dataIndex) =>
           data[dataIndex].name === 'cache' ? (
             <ComponentAvatar
-              label={data[dataIndex].nam}
+              label={data[dataIndex].name}
               size="small"
               cacheLevel={
                 data[dataIndex].attributes.filter(
@@ -76,11 +76,11 @@ export default function ComponentsTable(props: Props) {
     rowsPerPage: 10,
     expandableRowsHeader: false,
     expandableRows: true,
-    isRowExpandable: (rowIndex) => data[rowIndex]?.attributes !== undefined,
+    isRowExpandable: (dataIndex) => data[dataIndex]?.attributes !== undefined,
     renderExpandableRow: (row, meta) => {
       return (
         <React.Fragment>
-          {data[meta.rowIndex].attributes && (
+          {data[meta.dataIndex].attributes && (
             <tr>
               <td colSpan={7}>
                 <TableContainer>
@@ -92,7 +92,7 @@ export default function ComponentsTable(props: Props) {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {data[meta.rowIndex].attributes.map((row, index) => (
+                      {data[meta.dataIndex].attributes.map((row, index) => (
                         <TableRow key={index}>
                           <StyledTableCell>{row.name}</StyledTableCell>
                           <StyledTableCell>{row.value}</StyledTableCell>
