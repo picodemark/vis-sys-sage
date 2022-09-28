@@ -1,6 +1,6 @@
 import { RawNodeDatum, TreeNodeDatum } from 'react-d3-tree/lib/types/common';
 
-export type Attributes = Record<string, string | number | boolean>;
+export type Attributes = any;
 
 // type for node list item
 export interface NodeListItem {
