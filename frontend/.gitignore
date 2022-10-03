@@ -16,3 +16,11 @@ tests/coverage
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# python
+__pycache__/
+*.py[cod]
+
+# installer logs
+pip-log.txt
+pip-delete-this-directory.txt
