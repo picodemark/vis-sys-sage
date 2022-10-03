@@ -1,5 +1,4 @@
 # !/usr/bin/env python3
-import os
 import subprocess
 import sys
 import webbrowser
@@ -11,13 +10,6 @@ if sys.version_info < (3, 0, 0):
     sys.exit(1)
 
 ROOT = Path(__file__).parent.resolve()
-
-
-def check_privileges():
-    if sys.platform == "linux" or sys.platform == "linux2" or sys.platform == "darwin":
-        if not os.environ.get("SUDO_UID") and os.geteuid() != 0:
-            print("You need to run this script with sudo or as root.")
-            sys.exit(1)
 
 
 def run(cmd):
@@ -70,10 +62,7 @@ def check_existing_folder(folder):
     return folder.exists()
 
 
-def main() -> None:
-    # check for needed privileges
-    check_privileges()
-
+def main():
     # setup all requirements to run actual server
     setup_server()
 
