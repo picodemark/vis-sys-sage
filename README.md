@@ -21,7 +21,15 @@ $ git clone
 $ cd vis-sys-sage
 ```
 
-## Quick Start
+## Installation
+
+### General
+
+The application will be available in your browser at your localhost (http://127.0.0.1:5000).
+
+You can stop the application by terminating the running process in your console.
+
+### Quick Start
 
 The fastest and easiest way to run and use the application is to execute the following script:
 
@@ -32,9 +40,9 @@ $ python3 run.py
 
 The application will be available in your browser at your localhost (http://127.0.0.1:5000).
 
-## Manual Installation
+### Manual Installation
 
-### Install Python Packages
+#### Install Python Packages
 
 The application is based on a [Flask](https://flask.palletsprojects.com/en/2.1.x/) server.
 
@@ -51,7 +59,7 @@ Activate the virtual environment and install the required packages:
 pip install -r requirements.txt
 ```
 
-### Run the Server
+#### Run the Server
 
 Go to the server directory:
 
@@ -67,9 +75,9 @@ Start the server to be able to use the application locally:
 python3 -m flask run 
 ```
 
-# Development
+## Development
 
-## Create New Production Build
+### Create New Production Build
 
 Ensure that the environment variable `FLASK_ENV=production` is set correctly inside `server/.flaskenv`.
 
