@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { RawNodeDatum } from 'react-d3-tree/lib/types/common';
 import { ComponentListItem, CustomRawNodeDatum, NodeListItem } from '../types/types';
-import { tablePaginationClasses } from '@mui/material';
 
 interface Props {
   nodeIDs: string[];
