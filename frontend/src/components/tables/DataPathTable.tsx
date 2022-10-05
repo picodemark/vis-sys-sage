@@ -5,7 +5,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { StyledTableCell } from './util/common';
+import { StyledTableCell } from './utils/common';
 
 const COLUMN_NAMES = {
   dp_type: 'Type',

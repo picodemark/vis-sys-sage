@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import ComponentAvatar from '../graphs/ComponentAvatar';
 import HighlightComponentsButton from '../buttons/HighlightComponentsButton';
-import { StyledTableCell } from './util/common';
+import { StyledTableCell } from './utils/common';
 
 interface Props {
   data: any;
