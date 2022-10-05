@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sys-sage>
     <components>
-        <topology id="0" name="topology" addr="0x55c5858e7030">
+        <Topology id="0" name="topology" addr="0x55c5858e7030">
             <Node id="1" name="sys-sage node" addr="0x564c6edaa140">
                 <Attribute name="codename" value="marsupial"/>
                 <Attribute name="rack_no" value="15"/>
@@ -240,7 +240,7 @@
                     </Cache>
                 </Chip>
             </Node>
-        </topology>
+        </Topology>
     </components>
     <data-paths>
         <datapath source="0x564c6edb4770" target="0x564c6edb4770" oriented="16" dp_type="128" bw="8621.000000"

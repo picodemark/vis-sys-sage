@@ -78,7 +78,7 @@ class XMLParser:
     def __get_component_tree(self):
         sys_sage_dict = copy.deepcopy(self.converted_dict)
 
-        tree_dict = sys_sage_dict["sys-sage"]["components"]["topology"]
+        tree_dict = sys_sage_dict["sys-sage"]["components"]["Topology"]
 
         start_time_dict_to_d3_tree_graph = datetime.now()
         self.__get_component_tree_rec(tree_dict)

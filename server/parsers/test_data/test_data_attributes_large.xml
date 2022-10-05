@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sys-sage>
     <components>
-        <topology id="0" name="topology" addr="0x55c5858e7030">
+        <Topology id="0" name="topology" addr="0x55c5858e7030">
             <Node id="0" name="sys-sage node" addr="0x55c5858e7680">
                 <Chip id="0" name="Chip" addr="0x55c5858f1770">
                     <Cache id="7" name="cache" addr="0x55c5858f1850" cache_level="3" cache_size="17301504"
@@ -1858,7 +1858,7 @@
                     </Cache>
                 </Chip>
             </Node>
-        </topology>
+        </Topology>
     </components>
     <data-paths>
         <datapath source="0x55c5858f1920" target="0x55c5858f1920" oriented="16" dp_type="128" bw="8621.000000"
