@@ -6,7 +6,7 @@ from pathlib import Path
 from time import sleep
 
 if sys.version_info < (3, 8, 0):
-    print('This script assumes at least python3!')
+    print("This script assumes at least python 3.8!")
     sys.exit(1)
 
 ROOT = Path(__file__).parent.resolve()
