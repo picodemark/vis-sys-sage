@@ -5,7 +5,7 @@ import webbrowser
 from pathlib import Path
 from time import sleep
 
-if sys.version_info < (3, 0, 0):
+if sys.version_info < (3, 8, 0):
     print('This script assumes at least python3!')
     sys.exit(1)
 
