@@ -4,7 +4,6 @@ import { Toolbar } from '@mui/material';
 import TreeComponent from './TreeComponent';
 import { selectFilteredTree } from '../../../store/graphDataSlice';
 import Box from '@mui/material/Box';
-import '../../../style/component-graph.css';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
