@@ -9,7 +9,7 @@ Major changes may be possible in the future since sys-sage is currently under de
 
 For running the application, the following requirements have to be satisfied:
 
-- `python` with version 3.x
+- `python` with version 3.8.x
 - `pip` is installed
 
 ## Setup
