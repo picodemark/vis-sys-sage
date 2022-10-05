@@ -47,6 +47,8 @@ export default function DataPathTypeList() {
 
     if (dataPathTypes.indexOf('all') === -1 && value.indexOf('all') > -1) {
       setDataPathTypes(dataPathTypeSelector.map((path) => path.name));
+    } else if (dataPathTypes.indexOf('all') > -1 && value.indexOf('all') === -1) {
+      setDataPathTypes([]);
     } else if (value.indexOf('all') > -1) {
       setDataPathTypes(
         typeof value === 'string' ? value.split(',') : value.filter((item) => item !== 'all')

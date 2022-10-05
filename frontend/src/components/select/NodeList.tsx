@@ -44,6 +44,8 @@ export default function NodeList() {
 
     if (nodes.indexOf('all') === -1 && value.indexOf('all') > -1) {
       setNodes(nodeListSelector.map((node) => node.id));
+    } else if (nodes.indexOf('all') > -1 && value.indexOf('all') === -1) {
+      setNodes([]);
     } else if (value.indexOf('all') > -1) {
       setNodes(
         typeof value === 'string' ? value.split(',') : value.filter((item) => item !== 'all')
