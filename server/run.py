@@ -33,7 +33,6 @@ def create_venv():
 
 def install_packages():
     print("Install PyPI packages...")
-    # determine required
     run([get_python_executable(), "-m", "pip", "install", "--upgrade", "pip"])
     run([get_python_executable(), "-m", "pip", "install", "-r", "requirements.txt"])
 
