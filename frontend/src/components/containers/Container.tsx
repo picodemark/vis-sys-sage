@@ -15,7 +15,7 @@ export default function Container(props: Props) {
   const { name, content } = props;
 
   return (
-    <Box sx={{ margin: '1rem' }}>
+    <Box sx={{ margin: '1rem 3rem' }}>
       <Accordion defaultExpanded={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon color="secondary" />}

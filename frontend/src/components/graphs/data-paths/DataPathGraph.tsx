@@ -91,7 +91,7 @@ export default function DataPathGraph() {
   };
 
   const config = {
-    height: 1000, // height of rendered SVG
+    height: 700, // height of rendered SVG
     highlightDegree: 1, // highlight only neighbouring links
     nodeHighlightBehavior: true, // highlight all nodes on mouse-over
     linkHighlightBehavior: true, // highlight all nodes on mouse-over

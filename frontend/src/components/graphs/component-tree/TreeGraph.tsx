@@ -62,7 +62,7 @@ export default function TreeGraph() {
           Center
         </Button>
       </Toolbar>
-      <Box sx={{ width: '100%', height: '1000px' }} ref={box}>
+      <Box sx={{ width: '100%', height: 700 }} ref={box}>
         {Object.keys(treeSelector).length > 1 && (
           <Tree
             key={keyCount} // force tree graph to re-mount
