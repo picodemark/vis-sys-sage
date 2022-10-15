@@ -38,7 +38,7 @@ export default function GitHubButton() {
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Link
-            href="https://gitlab.lrz.de/vis-sys-sage/vis-sys-sage"
+            href="https://github.com/picodemark/vis-sys-sage"
             underline="none"
             target="_blank"
             rel="noopener">
