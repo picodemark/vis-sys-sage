@@ -4,6 +4,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Link from '@mui/material/Link';
+import Tooltip from '@mui/material/Tooltip';
 
 export default function GitHubButton() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -20,9 +21,11 @@ export default function GitHubButton() {
 
   return (
     <React.Fragment>
-      <IconButton onClick={handleClick} color="secondary">
-        <GitHubIcon />
-      </IconButton>
+      <Tooltip title="GitHub Links">
+        <IconButton onClick={handleClick} color="secondary">
+          <GitHubIcon />
+        </IconButton>
+      </Tooltip>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={handleClose}>
           <Link
