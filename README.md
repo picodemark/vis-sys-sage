@@ -25,7 +25,7 @@ $ cd vis-sys-sage
 
 ### General
 
-The application will be available in your browser at your localhost (http://127.0.0.1:5000).
+The application will be available in your browser on your localhost (http://127.0.0.1:5000).
 
 You can stop the application by terminating the running process in your console.
 
@@ -74,6 +74,11 @@ python3 -m flask run
 ```
 
 ## Development
+
+### Additional Requirements
+
+For the front-end development, preferably [Node.js](https://nodejs.org/en/) 16.18.0 LTS should be installed. Older
+version may also work, but were not tested.
 
 ### Start Local Development Servers
 
