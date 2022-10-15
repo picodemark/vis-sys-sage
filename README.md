@@ -78,7 +78,7 @@ python3 -m flask run
 ### Additional Requirements
 
 For the front-end development, preferably [Node.js](https://nodejs.org/en/) 16.18.0 LTS should be installed. Older
-version may also work, but were not tested.
+versions may also work, but were not tested.
 
 ### Start Local Development Servers
 
