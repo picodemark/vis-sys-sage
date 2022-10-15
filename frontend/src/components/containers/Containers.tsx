@@ -7,7 +7,7 @@ export default function Containers() {
   return (
     <React.Fragment>
       <Container name={'Component Tree'} content={<TreeGraph />} />
-      <Container name={'Data Paths'} content={<DataPathGraph />} />
+      <Container name={'Data-Path Graph'} content={<DataPathGraph />} />
     </React.Fragment>
   );
 }
