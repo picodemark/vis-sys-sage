@@ -7,7 +7,7 @@ import {
   setHighlightedComponents
 } from '../../../store/graphDataSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { CustomTreeNodeDatum } from '../../../types/types';
+import { CustomTreeNodeDatum } from '../../../types/component-tree';
 
 // replace nodeDatum with custom node nodeDatum
 interface AdaptedCustomNodeElementProps extends Omit<CustomNodeElementProps, 'nodeDatum'> {

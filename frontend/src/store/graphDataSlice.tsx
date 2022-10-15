@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
 import { RawNodeDatum } from 'react-d3-tree/lib/types/common';
-import { ComponentListItem, CustomRawNodeDatum, NodeListItem } from '../types/types';
+import { ComponentListItem, NodeListItem } from '../types/common';
+import { CustomRawNodeDatum } from '../types/component-tree';
 
 interface Props {
   nodeIDs: string[];
@@ -10,9 +11,9 @@ interface Props {
   componentsInfo: Record<string, ComponentListItem>;
   nodeList: NodeListItem[];
   filteredTypes: string[];
-  dataPathTypes: any;
-  dataPath: any;
-  dataPathLinkAttributes: any;
+  dataPathTypes: any; // TODO: use better typing
+  dataPath: any; // TODO: use better typing
+  dataPathLinkAttributes: any; // TODO: use better typing
   highlightedComponents: string[];
 }
 
@@ -38,6 +39,7 @@ export const graphDataSlice = createSlice({
   name: 'graphData',
   initialState,
   reducers: {
+    // TODO: use better typing
     setGraphData: (state, action: PayloadAction<any>) => {
       // set state based on payload
       state.tree = action.payload?.tree;
@@ -106,6 +108,7 @@ export const selectFilteredDataPath = createSelector(
       links: []
     };
 
+    // TODO: use better typing
     // merge all components per node into a single list
     filteredDataPath.nodes = Object.keys(dataPath.nodes).reduce((accNodes: any, id) => {
       if (ids.indexOf(id) > -1) {
@@ -120,6 +123,7 @@ export const selectFilteredDataPath = createSelector(
       return accNodes;
     }, []);
 
+    // TODO: use better typing
     // merge all links per node into a single list
     filteredDataPath.links = Object.keys(dataPath.links).reduce((accLinks: any, id) => {
       if (ids.indexOf(id) > -1) {

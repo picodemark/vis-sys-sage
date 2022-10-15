@@ -5,13 +5,13 @@ import {
   setHighlightedComponents
 } from '../../../store/graphDataSlice';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { Attributes } from '../../../types/types';
+import { Attributes } from '../../../types/common';
 import SelfDataPathButton from '../../buttons/SelfDataPathButton';
 
 interface Props {
   id: string;
   info: Record<string, string | Attributes>;
-  linkInfo: any;
+  linkInfo: any; // TODO: use better typing
 }
 
 function DataPathComponent(props: Props) {

@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import AttributesTable from '../tables/AttributesTable';
-import { Attributes } from '../../types/types';
+import { Attributes } from '../../types/common';
 import Box from '@mui/material/Box';
 import '../DraggablePaperComponent';
 import DraggablePaperComponent from '../DraggablePaperComponent';

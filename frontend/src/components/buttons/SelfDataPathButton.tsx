@@ -6,11 +6,11 @@ import DialogContent from '@mui/material/DialogContent';
 import Box from '@mui/material/Box';
 import DataPathText from '../graphs/data-paths/DataPathText';
 import DataPathTable from '../tables/DataPathTable';
-import { Attributes } from '../../types/types';
+import { Attributes } from '../../types/common';
 
 interface Props {
   sourceInfo: Record<string, string | Attributes>;
-  linkInfo: any;
+  linkInfo: any; // TODO: use better typing
 }
 
 export default function SelfDataPathButton(props: Props) {
