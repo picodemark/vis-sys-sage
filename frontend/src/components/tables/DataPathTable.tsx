@@ -14,7 +14,7 @@ const COLUMN_NAMES = {
 };
 
 interface Props {
-  linkInfo: any;
+  linkInfo: any; // TODO: use better typing
 }
 
 export default function DataPathTable(props: Props) {

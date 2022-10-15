@@ -2,7 +2,7 @@ import React from 'react';
 import MUIDataTable from 'mui-datatables';
 
 interface Props {
-  data: any;
+  data: any; // TODO: use better typing
 }
 
 export default function AttributesTable(props: Props) {

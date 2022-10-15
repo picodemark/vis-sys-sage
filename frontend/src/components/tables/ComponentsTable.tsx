@@ -10,7 +10,7 @@ import HighlightComponentsButton from '../buttons/HighlightComponentsButton';
 import { StyledTableCell } from './utils/common';
 
 interface Props {
-  data: any;
+  data: any; // TODO: use better typing
 }
 
 export default function ComponentsTable(props: Props) {
