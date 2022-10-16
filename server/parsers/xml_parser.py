@@ -50,12 +50,6 @@ class XMLParser:
         return converted_dict
 
     def __assign_component_info(self, component_dict, node_id):
-        """Assigns the component information to the components list and dict containing all components.
-
-        :param component_dict: dictionary containing information for a component
-        :param node_id: node ID of a component
-        :return:
-        """
         component_dict_obj = {
             "name": component_dict["name"],
             "nodeID": node_id,
