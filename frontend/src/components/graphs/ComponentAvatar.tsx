@@ -35,7 +35,7 @@ export default function ComponentAvatar(props: Props) {
 
   const [open, setOpen] = React.useState<boolean>(false);
 
-  const clickable = attributes !== undefined ? Object.keys(attributes).length > 1 : false;
+  const clickable = attributes !== undefined ? Object.keys(attributes).length > 0 : false;
 
   const openDialog = () => {
     if (clickable) {
