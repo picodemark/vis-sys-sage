@@ -13,7 +13,7 @@ interface Props {
   data: any; // TODO: use better typing
 }
 
-export default function ComponentsTable(props: Props) {
+export default function ComponentTable(props: Props) {
   const { data } = props;
 
   const columns = [
@@ -49,7 +49,7 @@ export default function ComponentsTable(props: Props) {
     },
     {
       name: 'componentID',
-      label: 'Components ID'
+      label: 'Component ID'
     },
     {
       name: 'attributesNumber',

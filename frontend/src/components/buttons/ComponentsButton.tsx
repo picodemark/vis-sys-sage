@@ -4,7 +4,7 @@ import { selectComponentList } from '../../store/graphDataSlice';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import ComponentsTable from '../tables/ComponentsTable';
+import ComponentTable from '../tables/ComponentTable';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import { useAppSelector } from '../../hooks/hooks';
 import DraggablePaperComponent from '../DraggablePaperComponent';
@@ -41,7 +41,7 @@ export default function ComponentsButton() {
         <DialogTitle style={{ cursor: 'move' }}>All Components</DialogTitle>
         <DialogContent sx={{ padding: 0 }}>
           <Box width={1000} maxHeight={600}>
-            <ComponentsTable data={componentListSelector} />
+            <ComponentTable data={componentListSelector} />
           </Box>
         </DialogContent>
       </Dialog>
