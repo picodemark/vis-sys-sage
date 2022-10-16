@@ -53,7 +53,7 @@ export default function ComponentsTable(props: Props) {
     },
     {
       name: 'attributesNumber',
-      label: 'Attributes'
+      label: 'Info'
     },
     {
       name: 'uniqueComponentID',
