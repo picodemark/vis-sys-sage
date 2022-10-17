@@ -11,7 +11,7 @@ import SelfDataPathButton from '../../buttons/SelfDataPathButton';
 interface Props {
   id: string;
   info: Record<string, string | Attributes>;
-  linkInfo: any; // TODO: use better typing
+  linkInfo: any;
 }
 
 function DataPathComponent(props: Props) {

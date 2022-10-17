@@ -10,7 +10,7 @@ import { Attributes } from '../../types/common';
 
 interface Props {
   sourceInfo: Record<string, string | Attributes>;
-  linkInfo: any; // TODO: use better typing
+  linkInfo: any;
 }
 
 export default function SelfDataPathButton(props: Props) {

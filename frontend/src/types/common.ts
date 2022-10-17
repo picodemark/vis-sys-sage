@@ -1,4 +1,4 @@
-export type Attributes = any; // TODO: use better typing
+export type Attributes = any;
 
 // type for node list item
 export interface NodeListItem {
