@@ -2,7 +2,6 @@
 <sys-sage>
   <components>
     <Topology id="0" name="topology" addr="0x55f91e091030">
-      <Node id="1" name="sys-sage node" addr="0x55f91e0910f0"/>
       <Node id="0" name="sys-sage node" addr="0x55f91e091650">
         <Chip id="0" name="Chip" addr="0x55f91e09b6e0">
           <Cache id="7" name="cache" addr="0x55f91e09b7a0" cache_level="3" cache_size="17301504" cache_associativity_ways="11">
