@@ -1,6 +1,6 @@
 # vis-sys-sage
 
-vis-sys-sage is an application to be run on the localhost for the visual presentation of HPC system states as stored in
+vis-sys-sage is an application to be run at the localhost for the visual presentation of HPC system states as stored in
 the [sys-sage](https://github.com/caps-tum/sys-sage) library.
 
 Major changes may be possible in the future since sys-sage is currently under development.
@@ -25,7 +25,7 @@ $ cd vis-sys-sage
 
 ### General
 
-The application will be available in your browser on your localhost (http://127.0.0.1:5000).
+The application will be available in your browser at your localhost (http://127.0.0.1:5000).
 
 You can stop the application by terminating the running process in your console.
 
@@ -89,7 +89,7 @@ cd frontend
 npm start
 ```
 
-Changes in the front-end code are reloaded immediately and can be seen on the localhost (http://127.0.0.1:3000).
+Changes in the front-end code are reloaded immediately and can be seen at the localhost (http://127.0.0.1:3000).
 
 Ensure that the environment variable `FLASK_ENV=development` is set correctly inside `server/.flaskenv`, so that the
 debug mode of the Flask server is automatically enabled.
