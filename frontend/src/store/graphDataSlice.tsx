@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
-import { RawNodeDatum } from 'react-d3-tree/lib/types/common';
-import { ComponentListItem, NodeListItem } from '../types/common';
-import { CustomRawNodeDatum } from '../types/component-tree';
+
+import { ComponentListItem, NodeListItem } from 'types/common';
+import { CustomRawNodeDatum } from 'types/component-tree';
+import { DataPathItem, DataPathLinkAttributes, DataPathTypeItem } from 'types/data-path';
+import { RawNodeDatum } from 'react-d3-tree/lib/types/types/common';
 
 interface Props {
   nodeIDs: string[];
@@ -11,9 +13,9 @@ interface Props {
   componentsInfo: Record<string, ComponentListItem>;
   nodeList: NodeListItem[];
   filteredTypes: string[];
-  dataPathTypes: any;
-  dataPath: any;
-  dataPathLinkAttributes: any;
+  dataPathTypes: DataPathTypeItem[];
+  dataPath: DataPathItem;
+  dataPathLinkAttributes: DataPathLinkAttributes;
   highlightedComponents: string[];
 }
 
@@ -31,7 +33,7 @@ const initialState: Props = {
     nodes: [],
     links: []
   },
-  dataPathLinkAttributes: [],
+  dataPathLinkAttributes: {},
   highlightedComponents: []
 };
 
