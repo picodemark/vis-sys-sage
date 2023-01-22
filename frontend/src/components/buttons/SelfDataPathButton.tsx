@@ -1,16 +1,15 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
-import DraggablePaperComponent from '../DraggablePaperComponent';
+import DraggablePaperComponent from 'components/DraggablePaperComponent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import Box from '@mui/material/Box';
-import DataPathText from '../graphs/data-paths/DataPathText';
-import DataPathTable from '../tables/DataPathTable';
-import { Attributes } from '../../types/common';
+import DataPathText from 'components/graphs/data-paths/DataPathText';
+import DataPathTable from 'components/tables/DataPathTable';
 
 interface Props {
-  sourceInfo: Record<string, string | Attributes>;
-  linkInfo: any;
+  sourceInfo: Record<string, string>;
+  linkInfo: string;
 }
 
 export default function SelfDataPathButton(props: Props) {

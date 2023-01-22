@@ -1,7 +1,7 @@
 import * as React from 'react';
 import IconButton from '@mui/material/IconButton';
-import { useAppDispatch } from '../../hooks/hooks';
-import { setHighlightedComponents } from '../../store/graphDataSlice';
+import { useAppDispatch } from 'hooks/hooks';
+import { setHighlightedComponents } from 'store/graphDataSlice';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import Tooltip from '@mui/material/Tooltip';
 

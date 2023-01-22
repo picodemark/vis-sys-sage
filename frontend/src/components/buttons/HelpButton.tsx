@@ -2,11 +2,11 @@ import * as React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DraggablePaperComponent from '../DraggablePaperComponent';
+import DraggablePaperComponent from 'components/DraggablePaperComponent';
 import IconButton from '@mui/material/IconButton';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import Tooltip from '@mui/material/Tooltip';
-import HelpContent from '../help/HelpContent';
+import HelpContent from 'components/help/HelpContent';
 
 export default function HelpButton() {
   const [open, setOpen] = React.useState<boolean>(false);

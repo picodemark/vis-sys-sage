@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Tree from 'react-d3-tree';
 import { Toolbar } from '@mui/material';
-import TreeComponent from './TreeComponent';
-import { selectFilteredTree } from '../../../store/graphDataSlice';
+import TreeComponent from 'components/graphs/component-tree/TreeComponent';
+import { selectFilteredTree } from 'store/graphDataSlice';
 import Box from '@mui/material/Box';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
 import Button from '@mui/material/Button';
-import { useAppSelector } from '../../../hooks/hooks';
-import { Point } from 'react-d3-tree/lib/types/common';
+import { useAppSelector } from 'hooks/hooks';
+import { Point } from 'react-d3-tree/lib/types/types/common';
 
 // maximum depth is set to be unrealistically high to show all components
-const MAX_DEPTH = Number.MAX_SAFE_INTEGER as number;
+const MAX_DEPTH: number = Number.MAX_SAFE_INTEGER;
 
 export default function TreeGraph() {
   const treeSelector = useAppSelector((state) => selectFilteredTree(state));

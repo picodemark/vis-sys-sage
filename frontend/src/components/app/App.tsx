@@ -1,9 +1,9 @@
 import React from 'react';
-import NavBar from '../bars/NavBar';
-import ActionBar from '../bars/ActionBar';
-import Containers from '../containers/Containers';
+import NavBar from 'components/bars/NavBar';
+import ActionBar from 'components/bars/ActionBar';
+import Containers from 'components/containers/Containers';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { store } from '../../store/store';
+import { store } from 'store/store';
 import { Provider } from 'react-redux';
 import { StyledEngineProvider } from '@mui/material/styles';
 

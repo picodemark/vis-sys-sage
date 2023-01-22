@@ -1,7 +1,7 @@
 import * as React from 'react';
-import TreeGraph from '../graphs/component-tree/TreeGraph';
-import Container from './Container';
-import DataPathGraph from '../graphs/data-paths/DataPathGraph';
+import TreeGraph from 'components/graphs/component-tree/TreeGraph';
+import Container from 'components/containers/Container';
+import DataPathGraph from 'components/graphs/data-paths/DataPathGraph';
 
 export default function Containers() {
   return (

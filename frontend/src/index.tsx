@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './components/app/App';
 
 // CSS stylesheets
-import './style/general.css';
+import 'style/general.css';
 
 // Roboto fonts
 import '@fontsource/roboto/300.css';

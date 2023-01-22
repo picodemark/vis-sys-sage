@@ -1,6 +1,6 @@
-import { RawNodeDatum, TreeNodeDatum } from 'react-d3-tree/lib/types/common';
-
 // custom type for raw node datum
+import { RawNodeDatum, TreeNodeDatum } from 'react-d3-tree/lib/types/types/common';
+
 export interface CustomRawNodeDatum extends RawNodeDatum {
   id?: string;
   uniqueComponentID?: string;

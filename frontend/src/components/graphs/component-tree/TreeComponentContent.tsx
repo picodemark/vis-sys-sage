@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { CustomNodeElementProps } from 'react-d3-tree/lib/types/common';
-import ComponentAvatar from '../ComponentAvatar';
-import TreeComponentArrow from './TreeComponentArrow';
-import {
-  selectHighlightedComponents,
-  setHighlightedComponents
-} from '../../../store/graphDataSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { CustomTreeNodeDatum } from '../../../types/component-tree';
+import ComponentAvatar from 'components/graphs/ComponentAvatar';
+import TreeComponentArrow from 'components/graphs/component-tree/TreeComponentArrow';
+import { selectHighlightedComponents, setHighlightedComponents } from 'store/graphDataSlice';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { CustomTreeNodeDatum } from 'types/component-tree';
+import { CustomNodeElementProps } from 'react-d3-tree/lib/types/types/common';
 
 // replace nodeDatum with custom node nodeDatum
 interface AdaptedCustomNodeElementProps extends Omit<CustomNodeElementProps, 'nodeDatum'> {

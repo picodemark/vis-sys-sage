@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import graphDataReducer from './graphDataSlice';
+import graphDataReducer from 'store/graphDataSlice';
 
 export const store = configureStore({
   reducer: {

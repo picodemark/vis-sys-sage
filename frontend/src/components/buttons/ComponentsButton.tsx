@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import { selectComponentList } from '../../store/graphDataSlice';
+import { selectComponentList } from 'store/graphDataSlice';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import ComponentTable from '../tables/ComponentTable';
+import ComponentTable from 'components/tables/ComponentTable';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import { useAppSelector } from '../../hooks/hooks';
-import DraggablePaperComponent from '../DraggablePaperComponent';
+import { useAppSelector } from 'hooks/hooks';
+import DraggablePaperComponent from 'components/DraggablePaperComponent';
 import Box from '@mui/material/Box';
 
 export default function ComponentsButton() {

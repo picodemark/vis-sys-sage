@@ -1,6 +1,6 @@
 import React from 'react';
-import { CustomNodeElementProps } from 'react-d3-tree/lib/types/common';
-import TreeComponentContent from './TreeComponentContent';
+import TreeComponentContent from 'components/graphs/component-tree/TreeComponentContent';
+import { CustomNodeElementProps } from 'react-d3-tree/lib/types/types/common';
 
 export default function TreeComponent(props: CustomNodeElementProps) {
   return (
