@@ -75,6 +75,16 @@ python3 -m flask run
 
 ## Development
 
+### Install Packages
+
+In the beginning, install the [npm](https://www.npmjs.com/) packages:
+
+```console
+npm install --force
+```
+
+The `--force` option is needed since some packages rely on older dependencies.
+
 ### Additional Requirements
 
 For the front-end development, preferably [Node.js](https://nodejs.org/en/) 16.18.0 LTS should be installed. Older
