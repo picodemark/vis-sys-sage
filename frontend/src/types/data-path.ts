@@ -1,6 +1,6 @@
-// type for data path type
 import { Attributes } from 'types/common';
 
+// type for data path type
 export interface DataPathTypeItem {
   name: string;
 }

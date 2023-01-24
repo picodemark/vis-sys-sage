@@ -1,3 +1,4 @@
+// type for attributes
 export type Attributes = Record<string, string | number | boolean>[];
 
 // type for node list item
