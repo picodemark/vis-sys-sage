@@ -26,7 +26,7 @@ export default function AttributesTable(props: Props) {
     print: false,
     filter: false,
     selectableRowsHideCheckboxes: true,
-    rowsPerPage: 5
+    rowsPerPage: 10
   };
 
   return <MUIDataTable data={data} columns={columns} options={options} />;
