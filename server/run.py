@@ -28,7 +28,7 @@ def get_python_executable():
 
 def create_venv():
     print("Create venv...")
-    run(["python3", "-m", "venv", "venv", ])
+    run(["python", "-m", "venv", "venv", ])
     # wait until venv is created
     sleep(30)
 
