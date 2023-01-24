@@ -5,6 +5,7 @@ import { selectHighlightedComponents, setHighlightedComponents } from 'store/gra
 import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import { CustomTreeNodeDatum } from 'types/component-tree';
 import { CustomNodeElementProps } from 'react-d3-tree/lib/types/types/common';
+import { Attributes } from 'types/common';
 
 // replace nodeDatum with custom node nodeDatum
 interface AdaptedCustomNodeElementProps extends Omit<CustomNodeElementProps, 'nodeDatum'> {
@@ -50,7 +51,10 @@ export default function TreeComponentContent(props: AdaptedCustomNodeElementProp
         }}
         onClick={triggerHighlight}>
         <div style={{ display: 'flex', alignItems: 'center', padding: '1rem', fontSize: '30px' }}>
-          <ComponentAvatar label={nodeDatum.name} attributes={nodeDatum?.attributes} />
+          <ComponentAvatar
+            label={nodeDatum.name}
+            attributes={nodeDatum?.attributes as unknown as Attributes}
+          />
           <span style={{ marginLeft: '0.5rem' }}>
             {nodeDatum.name === '' ? 'no name' : nodeDatum.name}
           </span>

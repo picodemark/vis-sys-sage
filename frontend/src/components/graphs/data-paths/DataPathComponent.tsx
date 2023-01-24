@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import ComponentAvatar from '../ComponentAvatar';
-import {
-  selectHighlightedComponents,
-  setHighlightedComponents
-} from '../../../store/graphDataSlice';
-import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
-import { Attributes } from '../../../types/common';
-import SelfDataPathButton from '../../buttons/SelfDataPathButton';
+import ComponentAvatar from 'components/graphs/ComponentAvatar';
+import { selectHighlightedComponents, setHighlightedComponents } from 'store/graphDataSlice';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
+import { Attributes } from 'types/common';
+import SelfDataPathButton from 'components/buttons/SelfDataPathButton';
+import { DataPathLinkAttributeInfo } from 'types/data-path';
 
 interface Props {
   id: string;
   info: Record<string, string | Attributes>;
-  linkInfo: any;
+  linkInfo: DataPathLinkAttributeInfo;
 }
 
 function DataPathComponent(props: Props) {
@@ -76,7 +74,9 @@ function DataPathComponent(props: Props) {
           <span style={{ fontSize: '24px', marginTop: 'auto' }}>{info.componentID as string}</span>
         </div>
       </div>
-      {linkInfo.length !== 0 && <SelfDataPathButton sourceInfo={info} linkInfo={linkInfo} />}
+      {linkInfo?.attributeNames.length !== 0 && (
+        <SelfDataPathButton sourceInfo={info} linkInfo={linkInfo} />
+      )}
     </div>
   );
 }

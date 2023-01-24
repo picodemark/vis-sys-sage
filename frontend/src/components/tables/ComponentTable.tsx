@@ -5,12 +5,13 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import ComponentAvatar from '../graphs/ComponentAvatar';
-import HighlightComponentsButton from '../buttons/HighlightComponentsButton';
-import { StyledTableCell } from './utils/common';
+import ComponentAvatar from 'components/graphs/ComponentAvatar';
+import HighlightComponentsButton from 'components/buttons/HighlightComponentsButton';
+import { StyledTableCell } from 'components/tables/utils/common';
+import { ComponentTableEntry } from 'types/common';
 
 interface Props {
-  data: any;
+  data: ComponentTableEntry;
 }
 
 export default function ComponentTable(props: Props) {

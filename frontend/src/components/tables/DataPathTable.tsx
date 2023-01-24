@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { StyledTableCell } from './utils/common';
+import { DataPathLinkAttributeInfo } from 'types/data-path';
 
 const COLUMN_NAMES = {
   dp_type: 'Type',
@@ -14,7 +15,7 @@ const COLUMN_NAMES = {
 };
 
 interface Props {
-  linkInfo: any;
+  linkInfo: DataPathLinkAttributeInfo;
 }
 
 export default function DataPathTable(props: Props) {

@@ -1,8 +1,9 @@
 import React from 'react';
 import MUIDataTable from 'mui-datatables';
+import { Attributes } from 'types/common';
 
 interface Props {
-  data: any;
+  data: Attributes;
 }
 
 export default function AttributesTable(props: Props) {

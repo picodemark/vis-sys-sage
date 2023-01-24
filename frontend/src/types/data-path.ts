@@ -1,4 +1,6 @@
 // type for data path type
+import { Attributes } from 'types/common';
+
 export interface DataPathTypeItem {
   name: string;
 }
@@ -8,44 +10,25 @@ interface DataPathNodeItem {
   id: string;
 }
 
-// type for data path nodes
-interface DataPathNodes {
-  [dataPathType: string]: DataPathNodeItem[];
-}
-
 // type for data path link
-interface DataPathLinkItem {
+export interface DataPathLinkItem {
   source: string;
   target: string;
 }
 
-// type for data path links
-interface DataPathLinks {
-  [dataPathType: string]: DataPathLinkItem[];
-}
-
 // type for data path
 export interface DataPathItem {
-  nodes: DataPathNodes | [];
-  links?: DataPathLinks | [];
+  nodes: Record<string, DataPathNodeItem[]> | [];
+  links?: Record<string, DataPathLinkItem[]> | [];
 }
 
-// type for data path link attributes
-interface DataPathLinkAttributeItem {
-  [attributeName: string]: string;
-}
-
-// type for data path links attributes for
-interface DataPathLinkAttributeConnection {
+// type for data path link attributes for a connection between two nodes
+export interface DataPathLinkAttributeInfo {
   attributeNames: string[];
-  attributes: DataPathLinkAttributeItem[];
+  attributes: Attributes;
 }
 
 // type for data path link attributes
-interface DataPathLinkAttributesTarget {
-  [target: string]: DataPathLinkAttributeConnection;
-}
-
 export interface DataPathLinkAttributes {
-  [source: string]: DataPathLinkAttributesTarget;
+  [source: string]: Record<string, DataPathLinkAttributeInfo>;
 }

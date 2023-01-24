@@ -3,7 +3,12 @@ import { createSelector } from 'reselect';
 
 import { ComponentListItem, NodeListItem } from 'types/common';
 import { CustomRawNodeDatum } from 'types/component-tree';
-import { DataPathItem, DataPathLinkAttributes, DataPathTypeItem } from 'types/data-path';
+import {
+  DataPathItem,
+  DataPathLinkAttributes,
+  DataPathLinkItem,
+  DataPathTypeItem
+} from 'types/data-path';
 import { RawNodeDatum } from 'react-d3-tree/lib/types/types/common';
 
 interface Props {
@@ -17,6 +22,15 @@ interface Props {
   dataPath: DataPathItem;
   dataPathLinkAttributes: DataPathLinkAttributes;
   highlightedComponents: string[];
+}
+
+interface PayloadActionDataPathType extends DataPathItem {
+  types?: DataPathTypeItem[];
+  attributes?: DataPathLinkAttributes;
+}
+
+interface PayloadActionType extends Omit<Props, 'dataPath'> {
+  dataPath: PayloadActionDataPathType;
 }
 
 const initialState: Props = {
@@ -41,7 +55,7 @@ export const graphDataSlice = createSlice({
   name: 'graphData',
   initialState,
   reducers: {
-    setGraphData: (state, action: PayloadAction<any>) => {
+    setGraphData: (state, action: PayloadAction<PayloadActionType>) => {
       // set state based on payload
       state.tree = action.payload?.tree;
       state.componentList = action.payload?.componentList;
@@ -110,7 +124,7 @@ export const selectFilteredDataPath = createSelector(
     };
 
     // merge all components per node into a single list
-    filteredDataPath.nodes = Object.keys(dataPath.nodes).reduce((accNodes: any, id) => {
+    filteredDataPath.nodes = Object.keys(dataPath.nodes).reduce((accNodes: NodeListItem[], id) => {
       if (ids.indexOf(id) > -1) {
         const nodeTypes = Object.keys(dataPath.nodes[id]).reduce((accTypes, type) => {
           if (types.indexOf(type) > -1) {
@@ -124,18 +138,21 @@ export const selectFilteredDataPath = createSelector(
     }, []);
 
     // merge all links per node into a single list
-    filteredDataPath.links = Object.keys(dataPath.links).reduce((accLinks: any, id) => {
-      if (ids.indexOf(id) > -1) {
-        const nodeTypes = Object.keys(dataPath.links[id]).reduce((accTypes, type) => {
-          if (types.indexOf(type) > -1) {
-            return accTypes.concat(dataPath.links[id][type]);
-          }
-          return accTypes;
-        }, []);
-        return accLinks.concat(nodeTypes);
-      }
-      return accLinks;
-    }, []);
+    filteredDataPath.links = Object.keys(dataPath.links).reduce(
+      (accLinks: DataPathLinkItem[], id) => {
+        if (ids.indexOf(id) > -1) {
+          const nodeTypes = Object.keys(dataPath.links[id]).reduce((accTypes, type) => {
+            if (types.indexOf(type) > -1) {
+              return accTypes.concat(dataPath.links[id][type]);
+            }
+            return accTypes;
+          }, []);
+          return accLinks.concat(nodeTypes);
+        }
+        return accLinks;
+      },
+      []
+    );
 
     return filteredDataPath;
   }
