@@ -2,8 +2,8 @@ import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import GitHubButton from '../buttons/GitHubButton';
-import HelpButton from '../buttons/HelpButton';
+import GitHubButton from 'components/buttons/GitHubButton';
+import HelpButton from 'components/buttons/HelpButton';
 
 export default function NavBar() {
   return (

@@ -2,22 +2,22 @@ import { Graph } from 'react-d3-graph';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import { MemoDataGraphComponent } from './DataPathComponent';
-import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+import { MemoDataGraphComponent } from 'components/graphs/data-paths/DataPathComponent';
+import { useAppDispatch, useAppSelector } from 'hooks/hooks';
 import {
   selectComponentsInfo,
   selectDataPathLinkAttributes,
   selectFilteredDataPath,
   setHighlightedComponents
-} from '../../../store/graphDataSlice';
+} from 'store/graphDataSlice';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import DataPathTable from '../../tables/DataPathTable';
-import DataPathText from './DataPathText';
-import DraggablePaperComponent from '../../DraggablePaperComponent';
+import DataPathTable from 'components/tables/DataPathTable';
+import DataPathText from 'components/graphs/data-paths/DataPathText';
+import DraggablePaperComponent from 'components/DraggablePaperComponent';
 import { Toolbar } from '@mui/material';
-import DataPathTypeList from '../../select/DataPathTypeList';
+import DataPathTypeList from 'components/select/DataPathTypeList';
 import Button from '@mui/material/Button';
 import CenterFocusWeakIcon from '@mui/icons-material/CenterFocusWeak';
 
