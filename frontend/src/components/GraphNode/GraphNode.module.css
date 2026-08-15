@@ -1,0 +1,52 @@
+.node {
+    --graph-node-size-factor: 1;
+
+    cursor: pointer;
+    outline: none;
+}
+
+.node[data-interactive="false"] {
+    cursor: default;
+}
+
+.node[data-root="true"] {
+    --graph-node-size-factor: 1.4;
+}
+
+.circle {
+    r: calc(var(--graph-node-radius) * var(--graph-node-size-factor));
+    stroke-width: calc(var(--graph-node-stroke-width) * var(--graph-node-size-factor));
+}
+
+.hitTarget {
+    fill: transparent;
+    r: calc(var(--graph-node-hit-radius) * var(--graph-node-size-factor));
+}
+
+.node[data-interactive="false"] .hitTarget {
+    pointer-events: none;
+}
+
+.node[data-interactive="true"]:hover .circle,
+.node:focus-visible .circle {
+    filter: brightness(1.15);
+}
+
+.node[data-selected="true"] .circle {
+    stroke-width: calc(var(--graph-node-stroke-width) * 1.8);
+}
+
+.label {
+    fill: var(--mantine-color-text);
+    font-family: var(--mantine-font-family-monospace), monospace;
+    font-size: 12px;
+    font-weight: 600;
+    paint-order: stroke fill;
+    pointer-events: none;
+    stroke: var(--mantine-color-body);
+    stroke-linejoin: round;
+    stroke-width: 4px;
+    transform: scale(var(--graph-inverse-scale));
+    transform-origin: 0 0;
+    visibility: hidden;
+}

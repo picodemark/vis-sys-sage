@@ -1,0 +1,9 @@
+pre-commit:
+  parallel: true
+  commands:
+    frontend-check:
+      glob: "frontend/**/*.{ts,tsx,css,json}"
+      run: pnpm --dir frontend check
+    backend-check:
+      glob: "backend/**/*.py"
+      run: cd backend && uv run --all-groups ruff check app

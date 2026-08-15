@@ -1,0 +1,71 @@
+.annotation {
+    fill: var(--mantine-color-dimmed);
+    font-family: var(--mantine-font-family), sans-serif;
+    font-size: 12px;
+    transform: scale(var(--graph-inverse-scale));
+    transform-origin: 0 0;
+}
+
+.relationPoint {
+    r: calc(var(--graph-node-radius) * 0.55);
+    transition:
+        r 120ms ease,
+        stroke-width 120ms ease;
+}
+
+.relation {
+    cursor: pointer;
+    opacity: 1;
+    outline: none;
+    transition:
+        filter 140ms ease,
+        opacity 140ms ease;
+}
+
+.relation[data-dimmed="true"] {
+    filter: saturate(0.8);
+    opacity: 0.22;
+}
+
+.relation[data-dimmed="true"]:hover,
+.relation[data-dimmed="true"]:focus-visible {
+    filter: brightness(1.08) saturate(1);
+    opacity: 0.72;
+}
+
+.relationLine {
+    transition:
+        filter 120ms ease,
+        opacity 120ms ease,
+        stroke-width 120ms ease;
+}
+
+.relation:hover .relationLine,
+.relation:focus-visible .relationLine {
+    filter: brightness(1.2);
+    opacity: 1;
+    stroke-width: 3px;
+}
+
+.relation[data-selected="true"] .relationLine {
+    opacity: 1;
+    stroke-width: 4px;
+}
+
+.relation[data-selected="true"] {
+    filter: brightness(1.08) saturate(1.2) drop-shadow(0 0 2px currentColor);
+    opacity: 1;
+}
+
+.relation[data-selected="true"] .relationPoint {
+    r: calc(var(--graph-node-radius) * 0.72);
+    stroke: var(--mantine-color-body);
+    stroke-width: var(--graph-node-stroke-width);
+}
+
+.relationHitArea {
+    cursor: pointer;
+    pointer-events: stroke;
+    stroke: transparent;
+    stroke-width: 32px;
+}

@@ -1,0 +1,40 @@
+services:
+  frontend:
+    image: node:24-slim
+    container_name: vis-sys-sage-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+      CI: "true"
+      VITE_PROXY_TARGET: "http://backend:8000"
+    working_dir: /app
+    command: sh -lc "npm install -g pnpm@11.17.0 && pnpm install --frozen-lockfile --store-dir /pnpm/store && pnpm dev --host 0.0.0.0 --port 5173"
+    volumes:
+      - ./frontend:/app
+      - frontend-pnpm-store:/pnpm/store
+      - frontend-node-modules:/app/node_modules
+
+  backend:
+    build:
+      context: .
+      target: backend-development
+    container_name: vis-sys-sage-backend
+    ports:
+      - "8000:8000"
+    tty: true
+    stdin_open: true
+    develop:
+      watch:
+        - path: ./backend/uv.lock
+          action: rebuild
+        - path: ./backend/pyproject.toml
+          action: rebuild
+    volumes:
+      - ./backend:/app
+      - /app/.venv
+
+volumes:
+  frontend-pnpm-store:
+  frontend-node-modules:

@@ -1,0 +1,60 @@
+{
+    "$schema": "https://biomejs.dev/schemas/2.5.4/schema.json",
+    "files": {
+        "includes": ["**", "!dist", "!.pnpm-store"]
+    },
+    "vcs": {
+        "clientKind": "git",
+        "enabled": true,
+        "useIgnoreFile": false
+    },
+    "formatter": {
+        "indentWidth": 4,
+        "lineWidth": 100,
+        "indentStyle": "space",
+        "attributePosition": "multiline"
+    },
+    "linter": {
+        "rules": {
+            "preset": "recommended",
+            "complexity": {
+                "noUselessThisAlias": "error"
+            },
+            "style": {
+                "useImportType": "error",
+                "useConst": "error"
+            },
+            "correctness": {
+                "noUnusedVariables": "error",
+                "noUnusedImports": "error",
+                "useImportExtensions": "off"
+            }
+        }
+    },
+    "overrides": [
+        {
+            "includes": [
+                "src/components/ComponentTree/ComponentTreeNodes.tsx",
+                "src/components/RelationGraph/RelationHierarchy.tsx",
+                "src/components/RelationGraph/RelationPath.tsx"
+            ],
+            "linter": {
+                "rules": {
+                    "a11y": {
+                        "noStaticElementInteractions": "off",
+                        "useSemanticElements": "off"
+                    }
+                }
+            }
+        }
+    ],
+    "javascript": {
+        "formatter": {
+            "semicolons": "always",
+            "quoteStyle": "double",
+            "jsxQuoteStyle": "double",
+            "trailingCommas": "all",
+            "arrowParentheses": "always"
+        }
+    }
+}
